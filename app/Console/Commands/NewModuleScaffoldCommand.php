@@ -71,10 +71,9 @@ class NewModuleScaffoldCommand extends Command
         }
 
         $stubs = [
-            'index' => 'admin.index',
             'create' => 'admin.create',
             'edit' => 'admin.edit',
-            'show' => 'admin.show',
+            'view' => 'admin.view',
         ];
         foreach ($stubs as $key => $value) {
             $this->info("Tạo Livewire Component: $modelClass/$key");
