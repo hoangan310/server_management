@@ -93,9 +93,12 @@ STUB;
   public function createShowBlade()
   {
     $pluralModelName = Str::pluralStudly($this->modelName);
-    $showBladePath = app_path('Views/Admin/' . Str::pluralStudly($this->modelName) . "/show-{$pluralModelName}.blade.php");
+    $pluralModelNameCamel = Str::camel($pluralModelName);
+    $showBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . "/show-{$pluralModelNameCamel}.blade.php");
     if (!$this->files->exists($showBladePath)) {
       $stub = $this->getShowBladeStub();
+      $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
+      $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
     }
     if (!is_dir(dirname($showBladePath))) {
       mkdir(dirname($showBladePath), 0755, true);
