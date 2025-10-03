@@ -54,39 +54,13 @@ class NewModuleScaffoldCommand extends Command
         ]);
         $this->info(Artisan::output());
 
-        // Tạo livewire components
         $this->info("Tạo Livewire Components: $modelClass");
-        $livewireClass = Str::studly(Str::pluralStudly($name));
-        Artisan::call('make:livewire', [
-            'name' => "Admin/{$livewireClass}",
-        ]);
-        $this->info(Artisan::output());
-
-        // Tạo thư mục livewire
-        $livewirePath = app_path('Livewire/Admin/' . $modelClass);
-        if (!is_dir($livewirePath)) {
-            $this->files->makeDirectory($livewirePath, 0755, true);
-        }
-
-        // $stubs = [
-        //     'create' => 'admin.create',
-        //     'edit' => 'admin.edit',
-        //     'view' => 'admin.view',
-        // ];
-        // foreach ($stubs as $key => $value) {
-        //     $this->info("Tạo Livewire Component: $modelClass/$key");
-        //     Artisan::call('make:livewire', [
-        //         'name' => "Admin/{$modelClass}/{$key}",
-        //     ]);
-        // }
-
-        $this->info(Artisan::output());
-
         $this->newModuleScaffold->createModel();
         $this->newModuleScaffold->createIndexComponent();
         $this->newModuleScaffold->createCreateComponent();
         $this->newModuleScaffold->createEditComponent();
         $this->newModuleScaffold->createShowComponent();
+        $this->info(Artisan::output());
 
         return CommandAlias::SUCCESS;
     }

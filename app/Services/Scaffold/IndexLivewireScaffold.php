@@ -144,17 +144,17 @@ STUB;
     {
         $pluralModelName = Str::pluralStudly($this->modelName);
         $pluralModelNameCamel = Str::camel($pluralModelName);
-        $modelNameCamel = Str::camel($this->modelName);
-        $indexBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . '/index-' . $modelNameCamel . '.blade.php');
+        $indexBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . '.blade.php');
+        dd($indexBladePath);
         if (!$this->files->exists($indexBladePath)) {
             $stub = $this->getIndexBladeStub();
             $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
             $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
+            if (!is_dir(dirname($indexBladePath))) {
+                mkdir(dirname($indexBladePath), 0755, true);
+            }
+            $this->files->put($indexBladePath, $stub);
         }
-        if (!is_dir(dirname($indexBladePath))) {
-            mkdir(dirname($indexBladePath), 0755, true);
-        }
-        $this->files->put($indexBladePath, $stub);
     }
 
     protected function getIndexBladeStub(): string
