@@ -83,10 +83,10 @@ class NewModuleScaffoldCommand extends Command
         $this->info(Artisan::output());
 
         $this->newModuleScaffold->createModel();
-        $this->newModuleScaffold->createIndexLivewireComponent();
-        $this->newModuleScaffold->createCreateLivewireComponent();
-        $this->newModuleScaffold->createEditLivewireComponent();
-        $this->newModuleScaffold->createShowLivewireComponent();
+        $this->newModuleScaffold->createIndexComponent();
+        $this->newModuleScaffold->createCreateComponent();
+        $this->newModuleScaffold->createEditComponent();
+        $this->newModuleScaffold->createShowComponent();
 
         return CommandAlias::SUCCESS;
     }
