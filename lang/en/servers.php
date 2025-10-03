@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'title' => 'Servers',
+    'title_description' => 'Manage your servers and their configurations',
+    'create_server' => 'Create Server',
+    'server_name' => 'Name',
+    'server_ip' => 'IP Address',
+    'server_type' => 'Type',
+    'server_status' => 'Status',
+    'server_provider' => 'Provider',
+    'server_cpu' => 'CPU',
+    'server_memory' => 'Memory',
+    'server_disk_space' => 'Disk Space',
+    'server_bandwidth' => 'Bandwidth',
+    'server_port' => 'Port',
+    'server_description' => 'Description',
+    'all_types' => 'All Types',
+    'all_statuses' => 'All Statuses',
+    'all_providers' => 'All Providers',
+    'delete_server' => 'Delete Server',
+    'you_are_about_to_delete' => 'You are about to delete this server.',
+    'server_deleted' => 'Server deleted successfully',
+    'cannot_delete' => 'You cannot delete your own server',
+    'view_server' => 'View Server',
+    'edit_server' => 'Edit Server',
+    'server_types' => [
+        'VPS' => 'VPS',
+        'Dedicated' => 'Dedicated',
+        'Cloud' => 'Cloud',
+    ],
+    'server_statuses' => [
+        'active' => 'Active',
+        'inactive' => 'Inactive',
+        'maintenance' => 'Maintenance',
+        'suspended' => 'Suspended',
+    ],
+];
