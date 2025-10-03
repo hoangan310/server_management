@@ -24,6 +24,10 @@ class EditLivewireScaffold
 namespace App\Livewire\Admin\{{PluralModelName}};
 
 use App\Models\{{ModelName}};
+use Illuminate\Contracts\View\View;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 class Edit{{ModelName}} extends Component
 {

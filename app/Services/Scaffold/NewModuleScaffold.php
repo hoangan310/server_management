@@ -50,8 +50,8 @@ class NewModuleScaffold
 
     public function createShowComponent()
     {
-        $showLivewireComponentScaffold = new ShowLivewireScaffold($this->modelName);
-        $showLivewireComponentScaffold->createShowLivewireComponent();
-        $showLivewireComponentScaffold->createShowBlade();
+        $showLivewireComponentScaffold = new ViewLivewireScaffold($this->modelName);
+        $showLivewireComponentScaffold->createViewLivewireComponent();
+        $showLivewireComponentScaffold->createViewBlade();
     }
 }

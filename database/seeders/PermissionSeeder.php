@@ -32,6 +32,11 @@ class PermissionSeeder extends Seeder
             'create permissions',
             'update permissions',
             'delete permissions',
+
+            'view servers',
+            'create servers',
+            'update servers',
+            'delete servers',
         ];
 
         foreach ($permissions as $permission) {
@@ -39,6 +44,5 @@ class PermissionSeeder extends Seeder
                 'name' => $permission,
             ]);
         }
-
     }
 }

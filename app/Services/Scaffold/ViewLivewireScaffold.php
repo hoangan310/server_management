@@ -5,7 +5,7 @@ namespace App\Services\Scaffold;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
-class ShowLivewireScaffold
+class ViewLivewireScaffold
 {
   protected string $modelName;
   protected Filesystem $files;
@@ -16,7 +16,7 @@ class ShowLivewireScaffold
   }
 
 
-  protected function getShowLivewireComponentStub(): string
+  protected function getViewLivewireComponentStub(): string
   {
     return <<<STUB
 <?php
@@ -24,36 +24,34 @@ class ShowLivewireScaffold
 namespace App\Livewire\Admin\{{PluralModelName}};
 
 use App\Models\{{ModelName}};
+use Illuminate\Contracts\View\View;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
-class Show{{ModelName}} extends Component
+class View{{ModelName}} extends Component
 {
-  use LivewireAlert;
+   use LivewireAlert;
+  public {{ModelName}} \${{ModelName}};
 
-  public function mount(): void
+  public function mount({{ModelName}} \${{ModelName}}): void
   {
-    \$this->authorize('show {{PluralModelName}}');
-  }
+    \$this->authorize('view {{PluralModelName}}');
 
-  public function show{{ModelName}}(): void
-  {
-    \$this->authorize('show {{PluralModelName}}');
-
-    \$this->validate();
-    
+    \$this->{{ModelName}} = \${{ModelName}};
   }
 
   #[Layout('components.layouts.admin')]
   public function render(): View
   {
-    return view('livewire.admin.{{PluralModelName}}.show-{{ModelName}}');
+    return view('livewire.admin.{{PluralModelName}}.view-{{ModelName}}');
   }
-  
 }
 
 STUB;
   }
 
-  protected function getShowBladeStub(): string
+  protected function getViewBladeStub(): string
   {
     return <<<STUB
 <section class="w-full">
@@ -76,33 +74,35 @@ STUB;
 STUB;
   }
 
-  public function createShowLivewireComponent()
+  public function createViewLivewireComponent()
   {
-    $showLivewireComponentPath = app_path('Livewire/Admin/' . Str::pluralStudly($this->modelName) . "/Show{$this->modelName}.php");
-    if (!$this->files->exists($showLivewireComponentPath)) {
-      $stub = $this->getShowLivewireComponentStub();
+    $viewLivewireComponentPath = app_path('Livewire/Admin/' . Str::pluralStudly($this->modelName) . "/View{$this->modelName}.php");
+    if (!$this->files->exists($viewLivewireComponentPath)) {
+      $stub = $this->getViewLivewireComponentStub();
       $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
       $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
-      if (!is_dir(dirname($showLivewireComponentPath))) {
-        mkdir(dirname($showLivewireComponentPath), 0755, true);
+      if (!is_dir(dirname($viewLivewireComponentPath))) {
+        mkdir(dirname($viewLivewireComponentPath), 0755, true);
       }
-      $this->files->put($showLivewireComponentPath, $stub);
+      $this->files->put($viewLivewireComponentPath, $stub);
     }
   }
 
-  public function createShowBlade()
+  public function createViewBlade()
   {
     $pluralModelName = Str::pluralStudly($this->modelName);
     $pluralModelNameCamel = Str::camel($pluralModelName);
-    $showBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . "/show-{$pluralModelNameCamel}.blade.php");
-    if (!$this->files->exists($showBladePath)) {
-      $stub = $this->getShowBladeStub();
+    $modelNameCamel = Str::camel($this->modelName);
+    $viewBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . "/view-{$modelNameCamel}.blade.php");
+    if (!$this->files->exists($viewBladePath)) {
+      $stub = $this->getViewBladeStub();
       $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
       $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
+
+      if (!is_dir(dirname($viewBladePath))) {
+        mkdir(dirname($viewBladePath), 0755, true);
+      }
+      $this->files->put($viewBladePath, $stub);
     }
-    if (!is_dir(dirname($showBladePath))) {
-      mkdir(dirname($showBladePath), 0755, true);
-    }
-    $this->files->put($showBladePath, $stub);
   }
 }

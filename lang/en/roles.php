@@ -16,4 +16,6 @@ return [
     'edit_role' => 'Edit Role',
     'edit_role_description' => 'Edit role in the application',
     'update_role' => 'Update Role',
+    'select_all_permissions' => 'Select All Permissions',
+    'select_group' => 'Select Group',
 ];

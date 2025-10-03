@@ -16,14 +16,14 @@
         <flux:spacer />
         <flux:select wire:model.live="type" class="!w-auto">
             <flux:select.option value="">{{ __('servers.all_types') }}</flux:select.option>
-            @foreach(['VPS', 'Dedicated', 'Cloud'] as $serverType)
+            @foreach(['VPS', 'DEDICATED', 'CLOUD'] as $serverType)
             <flux:select.option value="{{ $serverType }}">{{ __('servers.server_types.' . $serverType) }}</flux:select.option>
             @endforeach
         </flux:select>
 
         <flux:select wire:model.live="status" class="!w-auto">
             <flux:select.option value="">{{ __('servers.all_statuses') }}</flux:select.option>
-            @foreach(['active', 'inactive', 'maintenance', 'suspended'] as $serverStatus)
+            @foreach(['ACTIVE', 'INACTIVE', 'MAINTENANCE', 'SUSPENDED'] as $serverStatus)
             <flux:select.option value="{{ $serverStatus }}">{{ __('servers.server_statuses.' . $serverStatus) }}</flux:select.option>
             @endforeach
         </flux:select>
@@ -43,8 +43,8 @@
                 <x-table.heading>{{ __('servers.server_name') }}</x-table.heading>
                 <x-table.heading>{{ __('servers.server_ip') }}</x-table.heading>
                 <x-table.heading>{{ __('servers.server_type') }}</x-table.heading>
-                <x-table.heading>{{ __('servers.server_status') }}</x-table.heading>
                 <x-table.heading>{{ __('servers.server_provider') }}</x-table.heading>
+                <x-table.heading>{{ __('servers.server_status') }}</x-table.heading>
                 <x-table.heading class="text-right">{{ __('global.actions') }}</x-table.heading>
             </x-table.row>
         </x-slot:head>
@@ -55,16 +55,16 @@
                 <x-table.cell>{{ $server->name }}</x-table.cell>
                 <x-table.cell>{{ $server->ip }}</x-table.cell>
                 <x-table.cell>
-                    <flux:badge size="sm">{{ __('servers.server_types.' . $server->type) }}</flux:badge>
+                    {{ __('servers.server_types.' . $server->type) }}
                 </x-table.cell>
+                <x-table.cell>{{ $server->provider ?? '-' }}</x-table.cell>
                 <x-table.cell>
-                    <flux:badge size="sm" variant="{{ $server->status === 'active' ? 'success' : ($server->status === 'inactive' ? 'danger' : 'warning') }}">
+                    <flux:badge size="sm" variant="solid" color="{{ __('servers.server_status_colors.' . $server->status) }}">
                         {{ __('servers.server_statuses.' . $server->status) }}
                     </flux:badge>
                 </x-table.cell>
-                <x-table.cell>{{ $server->provider ?? '-' }}</x-table.cell>
                 <x-table.cell class="gap-2 flex justify-end">
-                    <flux:button href="{{ route('admin.servers.show', $server) }}" size="sm" variant="ghost">
+                    <flux:button href="{{ route('admin.servers.view', $server) }}" size="sm" variant="ghost">
                         {{ __('global.view') }}
                     </flux:button>
 

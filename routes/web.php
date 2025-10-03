@@ -35,9 +35,9 @@ Route::middleware(['auth'])->group(function (): void {
 
         // Servers
         Route::get('/servers', \App\Livewire\Admin\Servers::class)->name('servers.index')->middleware('can:view servers');
-        // Route::get('/servers/create', \App\Livewire\Admin\Servers\CreateServer::class)->name('servers.create')->middleware('can:create servers');
-        // Route::get('/servers/{server}/edit', \App\Livewire\Admin\Servers\EditServer::class)->name('servers.edit')->middleware('can:update servers');
-        // Route::get('/servers/{server}', \App\Livewire\Admin\Servers\ShowServer::class)->name('servers.show')->middleware('can:view servers');
+        Route::get('/servers/create', \App\Livewire\Admin\Servers\CreateServer::class)->name('servers.create')->middleware('can:create servers');
+        Route::get('/servers/{server}/edit', \App\Livewire\Admin\Servers\EditServer::class)->name('servers.edit')->middleware('can:update servers');
+        Route::get('/servers/{server}', \App\Livewire\Admin\Servers\ViewServer::class)->name('servers.view')->middleware('can:view servers');
     });
 });
 
