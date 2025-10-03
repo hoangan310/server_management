@@ -93,7 +93,8 @@ STUB;
   {
     $pluralModelName = Str::pluralStudly($this->modelName);
     $pluralModelNameCamel = Str::camel($pluralModelName);
-    $editBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . "/edit-{$pluralModelNameCamel}.blade.php");
+    $modelNameCamel = Str::camel($this->modelName);
+    $editBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . "/edit-{$modelNameCamel}.blade.php");
     if (!$this->files->exists($editBladePath)) {
       $stub = $this->getEditBladeStub();
       $stub = str_replace('{{ModelName}}', $this->modelName, $stub);

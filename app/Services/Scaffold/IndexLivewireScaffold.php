@@ -142,7 +142,10 @@ STUB;
 
     public function createIndexBlade()
     {
-        $indexBladePath = app_path('Views/Admin/' . Str::pluralStudly($this->modelName) . '.blade.php');
+        $pluralModelName = Str::pluralStudly($this->modelName);
+        $pluralModelNameCamel = Str::camel($pluralModelName);
+        $modelNameCamel = Str::camel($this->modelName);
+        $indexBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . '/index-' . $modelNameCamel . '.blade.php');
         if (!$this->files->exists($indexBladePath)) {
             $stub = $this->getIndexBladeStub();
             $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
