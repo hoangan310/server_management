@@ -11,6 +11,7 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class Users extends Component
 {
@@ -70,7 +71,7 @@ class Users extends Component
 
         $user = User::findOrFail($this->confirmingUserId);
 
-        if ($user->hasRole('Super Admin') || $user->id === auth()->id()) {
+        if ($user->hasRole('Super Admin') || $user->id === Auth::id()) {
             $this->alert('error', __('users.cannot_delete'));
             $this->confirmingUserId = null;
             $this->afterDeleteUser();

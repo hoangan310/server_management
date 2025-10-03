@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
@@ -85,9 +83,10 @@ class NewModuleScaffoldCommand extends Command
         $this->info(Artisan::output());
 
         $this->newModuleScaffold->createModel();
-        $this->newModuleScaffold->createLivewire();
-        $this->newModuleScaffold->createLivewireComponents();
-
+        $this->newModuleScaffold->createIndexLivewireComponent();
+        $this->newModuleScaffold->createCreateLivewireComponent();
+        $this->newModuleScaffold->createEditLivewireComponent();
+        $this->newModuleScaffold->createShowLivewireComponent();
 
         return CommandAlias::SUCCESS;
     }
