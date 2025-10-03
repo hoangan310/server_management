@@ -117,17 +117,17 @@ class {{ModelName}} extends Model
 STUB;
     }
 
-    protected function createModel()
+    public function createModel()
     {
         $this->files->put(app_path('Models/' . $this->modelName . '.php'), $this->getModelStub());
     }
 
-    protected function createLivewire()
+    public function createLivewire()
     {
         $this->files->put(app_path('Livewire/Admin/' . $this->modelName . '.php'), $this->getIndexLivewireStub());
     }
 
-    protected function createLivewireComponents()
+    public function createLivewireComponents()
     {
         $this->files->put(app_path('Livewire/Admin/' . $this->modelName . '/Index.php'), $this->getIndexLivewireStub());
     }

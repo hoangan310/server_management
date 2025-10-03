@@ -91,19 +91,4 @@ class NewModuleScaffoldCommand extends Command
 
         return CommandAlias::SUCCESS;
     }
-
-    protected function createModel()
-    {
-        $this->newModuleScaffold->createModel();
-    }
-
-    protected function createLivewire()
-    {
-        $this->newModuleScaffold->createLivewire();
-    }
-
-    protected function createLivewireComponents()
-    {
-        $this->newModuleScaffold->createLivewireComponents();
-    }
 }
