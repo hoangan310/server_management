@@ -145,7 +145,6 @@ STUB;
         $pluralModelName = Str::pluralStudly($this->modelName);
         $pluralModelNameCamel = Str::camel($pluralModelName);
         $indexBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . '.blade.php');
-        dd($indexBladePath);
         if (!$this->files->exists($indexBladePath)) {
             $stub = $this->getIndexBladeStub();
             $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
