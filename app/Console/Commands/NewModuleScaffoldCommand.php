@@ -35,7 +35,6 @@ class NewModuleScaffoldCommand extends Command
     {
         parent::__construct();
         $this->files = new Filesystem();
-        $this->newModuleScaffold = new NewModuleScaffold($this->argument('name'));
     }
 
     /**
@@ -44,6 +43,8 @@ class NewModuleScaffoldCommand extends Command
     public function handle(): int
     {
         $name = $this->argument('name');
+        $this->newModuleScaffold = new NewModuleScaffold($this->argument('name'));
+
         $modelClass = Str::studly($name);
         $tableName = Str::snake(Str::pluralStudly($name));
         $this->info("Tạo Model: $modelClass");
