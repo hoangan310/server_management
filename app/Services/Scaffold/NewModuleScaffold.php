@@ -27,27 +27,31 @@ class NewModuleScaffold
         $modelScaffold->createModel();
     }
 
-    public function createIndexLivewireComponent()
+    public function createIndexComponent()
     {
         $indexScaffold = new IndexLivewireScaffold($this->modelName);
         $indexScaffold->createIndex();
+        $indexScaffold->createIndexBlade();
     }
 
-    public function createCreateLivewireComponent()
+    public function createCreateComponent()
     {
         $createLivewireComponentScaffold = new CreateLivewireScaffold($this->modelName);
         $createLivewireComponentScaffold->createCreateLivewireComponent();
+        $createLivewireComponentScaffold->createCreateBlade();
     }
 
-    public function createEditLivewireComponent()
+    public function createEditComponent()
     {
         $editLivewireComponentScaffold = new EditLivewireScaffold($this->modelName);
         $editLivewireComponentScaffold->createEditLivewireComponent();
+        $editLivewireComponentScaffold->createEditBlade();
     }
 
-    public function createShowLivewireComponent()
+    public function createShowComponent()
     {
         $showLivewireComponentScaffold = new ShowLivewireScaffold($this->modelName);
         $showLivewireComponentScaffold->createShowLivewireComponent();
+        $showLivewireComponentScaffold->createShowBlade();
     }
 }

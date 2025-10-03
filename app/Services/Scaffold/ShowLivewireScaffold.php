@@ -34,7 +34,7 @@ class Show{{ModelName}} extends Component
     \$this->authorize('show {{PluralModelName}}');
   }
 
-  public function create{{ModelName}}(): void
+  public function show{{ModelName}}(): void
   {
     \$this->authorize('show {{PluralModelName}}');
 
@@ -53,9 +53,32 @@ class Show{{ModelName}} extends Component
 STUB;
   }
 
+  protected function getShowBladeStub(): string
+  {
+    return <<<STUB
+<section class="w-full">
+    <x-page-heading>
+        <x-slot:title>{{ __('{{PluralModelName}}.view_{{ModelName}}') }}</x-slot:title>
+        <x-slot:subtitle>Viewing {{ \${{ModelName}}->name }}</x-slot:subtitle>
+        <x-slot:buttons>
+            @can('update {{PluralModelName}}')
+              <flux:button icon="edit" variant="primary" href="{{ route('admin.{{PluralModelName}}.edit', {{ModelName}}) }}">
+                {{ __('{{PluralModelName}}.edit_{{ModelName}}') }}
+              </flux:button>
+            @endcan
+        </x-slot:buttons>
+    </x-page-heading>
+
+
+</section>
+
+
+STUB;
+  }
+
   public function createShowLivewireComponent()
   {
-    $showLivewireComponentPath = app_path('Livewire/Admin/' . Str::pluralStudly($this->modelName) . '/Show.php');
+    $showLivewireComponentPath = app_path('Livewire/Admin/' . Str::pluralStudly($this->modelName) . "/Show{$this->modelName}.php");
     if (!$this->files->exists($showLivewireComponentPath)) {
       $stub = $this->getShowLivewireComponentStub();
       $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
@@ -65,5 +88,18 @@ STUB;
       }
       $this->files->put($showLivewireComponentPath, $stub);
     }
+  }
+
+  public function createShowBlade()
+  {
+    $pluralModelName = Str::pluralStudly($this->modelName);
+    $showBladePath = app_path('Views/Admin/' . Str::pluralStudly($this->modelName) . "/show-{$pluralModelName}.blade.php");
+    if (!$this->files->exists($showBladePath)) {
+      $stub = $this->getShowBladeStub();
+    }
+    if (!is_dir(dirname($showBladePath))) {
+      mkdir(dirname($showBladePath), 0755, true);
+    }
+    $this->files->put($showBladePath, $stub);
   }
 }

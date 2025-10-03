@@ -34,7 +34,7 @@ class Edit{{ModelName}} extends Component
     \$this->authorize('edit {{PluralModelName}}');
   }
 
-  public function create{{ModelName}}(): void
+  public function edit{{ModelName}}(): void
   {
     \$this->authorize('edit {{PluralModelName}}');
 
@@ -53,9 +53,31 @@ class Edit{{ModelName}} extends Component
 STUB;
   }
 
+  protected function getEditBladeStub(): string
+  {
+    return <<<STUB
+<section class="w-full">
+    <x-page-heading>
+        <x-slot:title>{{ __('{{PluralModelName}}.edit_{{ModelName}}') }}</x-slot:title>
+        <x-slot:subtitle>{{ __('{{PluralModelName}}.edit_{{ModelName}}_description') }}</x-slot:subtitle>
+    </x-page-heading>
+
+    <x-form wire:submit="edit_{{ModelName}}" class="space-y-6">
+        <flux:input wire:model.live="name" label="{{ __('{{PluralModelName}}.name') }}" />
+
+        <flux:button type="submit" icon="save" variant="primary">
+            {{ __('{{PluralModelName}}.edit_{{ModelName}}') }}
+        </flux:button>
+    </x-form>
+
+</section>
+
+STUB;
+  }
+
   public function createEditLivewireComponent()
   {
-    $editLivewireComponentPath = app_path('Livewire/Admin/' . Str::pluralStudly($this->modelName) . '/Create.php');
+    $editLivewireComponentPath = app_path('Livewire/Admin/' . Str::pluralStudly($this->modelName) . "/Edit{$this->modelName}.php");
     if (!$this->files->exists($editLivewireComponentPath)) {
       $stub = $this->getEditLivewireComponentStub();
       $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
@@ -65,5 +87,20 @@ STUB;
       }
       $this->files->put($editLivewireComponentPath, $stub);
     }
+  }
+
+  public function createEditBlade()
+  {
+    $pluralModelName = Str::pluralStudly($this->modelName);
+    $editBladePath = app_path('Views/Admin/' . Str::pluralStudly($this->modelName) . "/edit-{$pluralModelName}.blade.php");
+    if (!$this->files->exists($editBladePath)) {
+      $stub = $this->getEditBladeStub();
+      $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
+      $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
+    }
+    if (!is_dir(dirname($editBladePath))) {
+      mkdir(dirname($editBladePath), 0755, true);
+    }
+    $this->files->put($editBladePath, $stub);
   }
 }

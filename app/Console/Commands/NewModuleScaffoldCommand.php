@@ -68,17 +68,17 @@ class NewModuleScaffoldCommand extends Command
             $this->files->makeDirectory($livewirePath, 0755, true);
         }
 
-        $stubs = [
-            'create' => 'admin.create',
-            'edit' => 'admin.edit',
-            'view' => 'admin.view',
-        ];
-        foreach ($stubs as $key => $value) {
-            $this->info("Tạo Livewire Component: $modelClass/$key");
-            Artisan::call('make:livewire', [
-                'name' => "Admin/{$modelClass}/{$key}",
-            ]);
-        }
+        // $stubs = [
+        //     'create' => 'admin.create',
+        //     'edit' => 'admin.edit',
+        //     'view' => 'admin.view',
+        // ];
+        // foreach ($stubs as $key => $value) {
+        //     $this->info("Tạo Livewire Component: $modelClass/$key");
+        //     Artisan::call('make:livewire', [
+        //         'name' => "Admin/{$modelClass}/{$key}",
+        //     ]);
+        // }
 
         $this->info(Artisan::output());
 
