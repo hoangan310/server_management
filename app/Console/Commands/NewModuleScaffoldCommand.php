@@ -18,7 +18,7 @@ class NewModuleScaffoldCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'module:new {name}';
+    protected $signature = 'new:module {name}';
 
     /**
      * The console command description.

@@ -119,16 +119,33 @@ STUB;
 
     public function createModel()
     {
-        $this->files->put(app_path('Models/' . $this->modelName . '.php'), $this->getModelStub());
+        $modelPath = app_path('Models/' . $this->modelName . '.php');
+        if (!$this->files->exists($modelPath)) {
+            $stub = $this->getModelStub();
+            $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
+            $this->files->put($modelPath, $stub);
+        }
     }
 
     public function createLivewire()
     {
-        $this->files->put(app_path('Livewire/Admin/' . $this->modelName . '.php'), $this->getIndexLivewireStub());
+        $livewirePath = app_path("Http/Livewire/Admin/$this->modelName.php");
+        if (!$this->files->exists($livewirePath)) {
+            $stub = $this->getIndexLivewireStub();
+            $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
+            $stub = str_replace('{{tableName}}', $this->tableName, $stub);
+            $this->files->put($livewirePath, $stub);
+        }
     }
 
     public function createLivewireComponents()
     {
-        $this->files->put(app_path('Livewire/Admin/' . $this->modelName . '/Index.php'), $this->getIndexLivewireStub());
+        $livewirePath = app_path('Livewire/Admin/' . $this->modelName . '/Index.php');
+        if (!$this->files->exists($livewirePath)) {
+            $stub = $this->getIndexLivewireStub();
+            $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
+            $stub = str_replace('{{tableName}}', $this->tableName, $stub);
+            $this->files->put($livewirePath, $stub);
+        }
     }
 }
