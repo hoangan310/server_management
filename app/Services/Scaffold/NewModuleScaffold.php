@@ -123,7 +123,7 @@ STUB;
         if (!$this->files->exists($modelPath)) {
             $stub = $this->getModelStub();
             $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
-            $this->files->put($modelPath, $stub);
+            $this->modifyFile($modelPath, $stub);
         }
     }
 
@@ -134,7 +134,7 @@ STUB;
             $stub = $this->getIndexLivewireStub();
             $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
             $stub = str_replace('{{tableName}}', $this->tableName, $stub);
-            $this->files->put($livewirePath, $stub);
+            $this->modifyFile($livewirePath, $stub);
         }
     }
 
@@ -145,7 +145,15 @@ STUB;
             $stub = $this->getIndexLivewireStub();
             $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
             $stub = str_replace('{{tableName}}', $this->tableName, $stub);
-            $this->files->put($livewirePath, $stub);
+            $this->modifyFile($livewirePath, $stub);
         }
+    }
+
+    protected function modifyFile(string $path, string $stub)
+    {
+        if (!$this->files->exists($path)) {
+            mkdir(dirname($path), 0755, true);
+        }
+        $this->files->put($path, $stub);
     }
 }
