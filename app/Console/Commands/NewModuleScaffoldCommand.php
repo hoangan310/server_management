@@ -62,6 +62,10 @@ class NewModuleScaffoldCommand extends Command
         $this->newModuleScaffold->createShowComponent();
         $this->info(Artisan::output());
 
+        $this->info("Tạo Language Files: $modelClass");
+        $this->newModuleScaffold->createLanguageFiles();
+        $this->info("Language files created successfully!");
+
         return CommandAlias::SUCCESS;
     }
 }

@@ -54,4 +54,10 @@ class NewModuleScaffold
         $showLivewireComponentScaffold->createViewLivewireComponent();
         $showLivewireComponentScaffold->createViewBlade();
     }
+
+    public function createLanguageFiles()
+    {
+        $languageScaffold = new LanguageScaffold($this->modelName);
+        $languageScaffold->createLanguageFiles();
+    }
 }

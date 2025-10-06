@@ -31,7 +31,6 @@ use Livewire\Attributes\Session;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Auth;
 
 class {{PluralModelName}} extends Component
 {
@@ -45,19 +44,19 @@ class {{PluralModelName}} extends Component
     public string \$search = '';
 
     public bool \$isShowModal = false;
-    public ?int \$confirming{{ModelName}}Id = null; // id đang chờ confirm xóa
+    public ?int \$confirming{{ModelName}}Id = null;
 
     /** @var array<int,string> */
     public array \$searchableFields = ['name'];
 
     protected \$listeners = [
-        '{{ModelName}}Deleted' => '\$refresh',
-        '{{ModelName}}NotDeleted' => '\$refresh',
+        '{{modelName}}Deleted' => '\$refresh',
+        '{{modelName}}NotDeleted' => '\$refresh',
     ];
 
     public function mount(): void
     {
-        \$this->authorize('view {{PluralModelName}}');
+        \$this->authorize('view {{pluralModelNameCamel}}');
     }
 
     public function updatingSearch(): void
@@ -65,11 +64,10 @@ class {{PluralModelName}} extends Component
         \$this->resetPage();
     }
 
-    // Khi nhấn delete → lưu user id và mở modal
-    public function confirmDelete(int \${{ModelName}}Id): void
+    public function confirmDelete(int \${{modelName}}Id): void
     {
         \$this->isShowModal = true;
-        \$this->confirming{{ModelName}}Id = \${{ModelName}}Id;
+        \$this->confirming{{ModelName}}Id = \${{modelName}}Id;
     }
 
     public function afterDelete{{ModelName}}(): void
@@ -78,39 +76,28 @@ class {{PluralModelName}} extends Component
         \$this->confirming{{ModelName}}Id = null;
     }
 
-    // Thực sự xóa user khi confirm modal
     public function delete{{ModelName}}(): void
     {
         if (!\$this->confirming{{ModelName}}Id) {
             return;
         }
 
-        \$this->authorize('delete {{PluralModelName}}');
+        \$this->authorize('delete {{pluralModelNameCamel}}');
 
-        \${{ModelName}} = {{ModelName}}::findOrFail(\$this->confirming{{ModelName}}Id);
+        \${{modelName}} = {{ModelName}}::findOrFail(\$this->confirming{{ModelName}}Id);
+        \${{modelName}}->delete();
 
-        if (\${{ModelName}}->hasRole('Super Admin') || \${{ModelName}}->id === Auth::id()) {
-            \$this->alert('error', __('{{PluralModelName}}.cannot_delete'));
-            \$this->confirming{{ModelName}}Id = null;
-            \$this->afterDelete{{ModelName}}();
-            return;
-        }
-
-        \${{ModelName}}->delete();
-
-        \$this->alert('success', __('{{PluralModelName}}.{{ModelName}}_deleted'));
+        \$this->alert('success', __('{{pluralModelNameCamel}}.{{modelName}}_deleted'));
 
         \$this->confirming{{ModelName}}Id = null;
         \$this->resetPage();
-
-        // **Đóng modal**
         \$this->afterDelete{{ModelName}}();
     }
 
     #[Layout('components.layouts.admin')]
     public function render(): View
     {
-        \${{PluralModelName}} = {{ModelName}}::query()
+        \${{pluralModelNameCamel}} = {{ModelName}}::query()
             ->when(\$this->search, function (\$query) {
                 foreach (\$this->searchableFields as \$field) {
                     \$query->orWhere(\$field, 'LIKE', "%{\$this->search}%");
@@ -118,8 +105,7 @@ class {{PluralModelName}} extends Component
             })
             ->paginate(\$this->perPage);
 
-
-        return view('livewire.admin.{{PluralModelName}}', compact('{{PluralModelName}}'));
+        return view('livewire.admin.{{pluralModelNameCamel}}', compact('{{pluralModelNameCamel}}'));
     }
 }
 
@@ -130,9 +116,15 @@ STUB;
     {
         $modelPath = app_path('Livewire/Admin/' . Str::pluralStudly($this->modelName) . '.php');
         if (!$this->files->exists($modelPath)) {
+            $modelName = Str::camel($this->modelName);
+            $ModelName = Str::studly($this->modelName);
+            $PluralModelName = Str::pluralStudly($this->modelName);
+            $pluralModelNameCamel = Str::camel($PluralModelName);
             $stub = $this->getIndexStub();
-            $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
-            $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
+            $stub = str_replace('{{modelName}}', $modelName, $stub);
+            $stub = str_replace('{{ModelName}}', $ModelName, $stub);
+            $stub = str_replace('{{PluralModelName}}', $PluralModelName, $stub);
+            $stub = str_replace('{{pluralModelNameCamel}}', $pluralModelNameCamel, $stub);
             if (!is_dir(dirname($modelPath))) {
                 mkdir(dirname($modelPath), 0755, true);
             }
@@ -146,9 +138,15 @@ STUB;
         $pluralModelNameCamel = Str::camel($pluralModelName);
         $indexBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . '.blade.php');
         if (!$this->files->exists($indexBladePath)) {
+            $modelName = Str::camel($this->modelName);
+            $ModelName = Str::studly($this->modelName);
+            $PluralModelName = Str::pluralStudly($this->modelName);
+            $pluralModelNameCamel = Str::camel($PluralModelName);
             $stub = $this->getIndexBladeStub();
-            $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
-            $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
+            $stub = str_replace('{{ModelName}}', $ModelName, $stub);
+            $stub = str_replace('{{modelName}}', $modelName, $stub);
+            $stub = str_replace('{{PluralModelName}}', $PluralModelName, $stub);
+            $stub = str_replace('{{pluralModelNameCamel}}', $pluralModelNameCamel, $stub);
             if (!is_dir(dirname($indexBladePath))) {
                 mkdir(dirname($indexBladePath), 0755, true);
             }
@@ -161,12 +159,12 @@ STUB;
         return <<<STUB
 <section class="w-full">
     <x-page-heading>
-        <x-slot:title>{{ __('{{PluralModelName}}.title') }}</x-slot:title>
-        <x-slot:subtitle>{{ __('{{PluralModelName}}.title_description') }}</x-slot:subtitle>
+        <x-slot:title>{{ __('{{pluralModelNameCamel}}.title') }}</x-slot:title>
+        <x-slot:subtitle>{{ __('{{pluralModelNameCamel}}.title_description') }}</x-slot:subtitle>
         <x-slot:buttons>
-            @can('create {{PluralModelName}}')
-            <flux:button href="{{ route('admin.servers.create') }}" variant="primary" icon="plus">
-                {{ __('{{PluralModelName}}.create_{{ModelName}}') }}
+            @can('create {{pluralModelNameCamel}}')
+            <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.create') }}" variant="primary" icon="plus">
+                {{ __('{{pluralModelNameCamel}}.create_{{modelName}}') }}
             </flux:button>
             @endcan
         </x-slot:buttons>
@@ -188,32 +186,45 @@ STUB;
         <x-slot:head>
             <x-table.row>
                 <x-table.heading>{{ __('global.id') }}</x-table.heading>
-                <x-table.heading>{{ __('{{PluralModelName}}.{{ModelName}}_name') }}</x-table.heading>
+                <x-table.heading>{{ __('{{pluralModelNameCamel}}.{{modelName}}_name') }}</x-table.heading>
                 <x-table.heading class="text-right">{{ __('global.actions') }}</x-table.heading>
             </x-table.row>
         </x-slot:head>
         <x-slot:body>
-            @foreach(\${{PluralModelName}} as \${{ModelName}})
-            <x-table.row wire:key="{{ModelName}}-{{ \${{ModelName}}->id }}">
-                <x-table.cell>{{ \${{ModelName}}->id }}</x-table.cell>
-                <x-table.cell>{{ \${{ModelName}}->name }}</x-table.cell>
+            @foreach(\${{pluralModelNameCamel}} as \${{modelName}})
+            <x-table.row wire:key="{{modelName}}-{{ \${{modelName}}->id }}">
+                <x-table.cell>{{ \${{modelName}}->id }}</x-table.cell>
+                <x-table.cell>{{ \${{modelName}}->name }}</x-table.cell>
+                <x-table.cell class="text-right">
+                    <div class="flex items-center justify-end gap-2">
+                        @can('view {{pluralModelNameCamel}}')
+                        <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.show', \${{modelName}}) }}" icon="eye" variant="ghost" size="sm" />
+                        @endcan
+                        @can('update {{pluralModelNameCamel}}')
+                        <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.edit', \${{modelName}}) }}" icon="edit" variant="ghost" size="sm" />
+                        @endcan
+                        @can('delete {{pluralModelNameCamel}}')
+                        <flux:button wire:click="confirmDelete({{ \${{modelName}}->id }})" icon="trash" variant="ghost" size="sm" />
+                        @endcan
+                    </div>
+                </x-table.cell>
             </x-table.row>
             @endforeach
         </x-slot:body>
     </x-table>
 
     <div class="mt-4">
-        {{ \${{PluralModelName}}->links() }}
+        {{ \${{pluralModelNameCamel}}->links() }}
     </div>
 
-    <!-- Modal chung cho tất cả {{PluralModelName}} -->
-    <flux:modal name="delete-{{ModelName}}-modal"
-        x-show="\$wire.isShowModal"
+    <!-- Modal chung cho tất cả {{pluralModelNameCamel}} -->
+    <flux:modal name="delete-{{modelName}}-modal"
+        x-show="\$wire.isShowModal" 
         class="min-w-[22rem] space-y-6 flex flex-col justify-between">
         <div>
-            <flux:heading size="lg">{{ __('{{PluralModelName}}.delete_{{ModelName}}') }}?</flux:heading>
+            <flux:heading size="lg">{{ __('{{pluralModelNameCamel}}.delete_{{modelName}}') }}?</flux:heading>
             <flux:subheading>
-                <p>{{ __('{{PluralModelName}}.you_are_about_to_delete') }}</p>
+                <p>{{ __('{{pluralModelNameCamel}}.you_are_about_to_delete') }}</p>
                 <p>{{ __('global.this_action_is_irreversible') }}</p>
             </flux:subheading>
         </div>
@@ -223,7 +234,7 @@ STUB;
             </flux:modal.close>
             <flux:spacer />
             <flux:button type="button" variant="danger" wire:click="delete{{ModelName}}">
-                {{ __('{{PluralModelName}}.delete_{{ModelName}}') }}
+                {{ __('{{pluralModelNameCamel}}.delete_{{modelName}}') }}
             </flux:button>
         </div>
     </flux:modal>

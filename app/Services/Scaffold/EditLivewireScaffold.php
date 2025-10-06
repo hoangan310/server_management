@@ -27,31 +27,48 @@ use App\Models\{{ModelName}};
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\HandlesRedirects;
 
 class Edit{{ModelName}} extends Component
 {
-  use LivewireAlert;
+    use HandlesRedirects;
+    use LivewireAlert;
 
-  public function mount(): void
-  {
-    \$this->authorize('edit {{PluralModelName}}');
-  }
+    public {{ModelName}} \${{modelName}};
 
-  public function edit{{ModelName}}(): void
-  {
-    \$this->authorize('edit {{PluralModelName}}');
+    #[Validate(['required', 'string', 'max:255'])]
+    public string \$name = '';
 
-    \$this->validate();
-    
-  }
+    public function mount({{ModelName}} \${{modelName}}): void
+    {
+        \$this->authorize('update {{pluralModelNameCamel}}');
 
-  #[Layout('components.layouts.admin')]
-  public function render(): View
-  {
-    return view('livewire.admin.{{PluralModelName}}.edit-{{ModelName}}');
-  }
-  
+        \$this->{{modelName}} = \${{modelName}};
+        \$this->name = \$this->{{modelName}}->name;
+    }
+
+    public function update{{ModelName}}(): void
+    {
+        \$this->authorize('update {{pluralModelNameCamel}}');
+
+        \$this->validate();
+
+        \$this->{{modelName}}->update([
+            'name' => \$this->name,
+        ]);
+
+        \$this->flash('success', __('{{pluralModelNameCamel}}.{{modelName}}_updated'));
+
+        \$this->redirect(route('admin.{{pluralModelNameCamel}}.index'), true);
+    }
+
+    #[Layout('components.layouts.admin')]
+    public function render(): View
+    {
+        return view('livewire.admin.{{pluralModelNameCamel}}.edit-{{modelName}}');
+    }
 }
 
 STUB;
@@ -62,15 +79,15 @@ STUB;
     return <<<STUB
 <section class="w-full">
     <x-page-heading>
-        <x-slot:title>{{ __('{{PluralModelName}}.edit_{{ModelName}}') }}</x-slot:title>
-        <x-slot:subtitle>{{ __('{{PluralModelName}}.edit_{{ModelName}}_description') }}</x-slot:subtitle>
+        <x-slot:title>{{ __('{{pluralModelNameCamel}}.edit_{{modelName}}') }}</x-slot:title>
+        <x-slot:subtitle>{{ __('{{pluralModelNameCamel}}.edit_{{modelName}}_description') }}</x-slot:subtitle>
     </x-page-heading>
 
-    <x-form wire:submit="edit_{{ModelName}}" class="space-y-6">
-        <flux:input wire:model.live="name" label="{{ __('{{PluralModelName}}.name') }}" />
+    <x-form wire:submit="update{{ModelName}}" class="space-y-6">
+        <flux:input wire:model.live="name" label="{{ __('{{pluralModelNameCamel}}.{{modelName}}_name') }}" />
 
         <flux:button type="submit" icon="save" variant="primary">
-            {{ __('{{PluralModelName}}.edit_{{ModelName}}') }}
+            {{ __('{{pluralModelNameCamel}}.update_{{modelName}}') }}
         </flux:button>
     </x-form>
 
@@ -83,9 +100,15 @@ STUB;
   {
     $editLivewireComponentPath = app_path('Livewire/Admin/' . Str::pluralStudly($this->modelName) . "/Edit{$this->modelName}.php");
     if (!$this->files->exists($editLivewireComponentPath)) {
+      $modelName = Str::camel($this->modelName);
+      $ModelName = Str::studly($this->modelName);
+      $PluralModelName = Str::pluralStudly($this->modelName);
+      $pluralModelNameCamel = Str::camel($PluralModelName);
       $stub = $this->getEditLivewireComponentStub();
-      $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
-      $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
+      $stub = str_replace('{{modelName}}', $modelName, $stub);
+      $stub = str_replace('{{ModelName}}', $ModelName, $stub);
+      $stub = str_replace('{{PluralModelName}}', $PluralModelName, $stub);
+      $stub = str_replace('{{pluralModelNameCamel}}', $pluralModelNameCamel, $stub);
       if (!is_dir(dirname($editLivewireComponentPath))) {
         mkdir(dirname($editLivewireComponentPath), 0755, true);
       }
@@ -100,13 +123,19 @@ STUB;
     $modelNameCamel = Str::camel($this->modelName);
     $editBladePath = resource_path('views/livewire/admin/' . $pluralModelNameCamel . "/edit-{$modelNameCamel}.blade.php");
     if (!$this->files->exists($editBladePath)) {
+      $modelName = Str::camel($this->modelName);
+      $ModelName = Str::studly($this->modelName);
+      $PluralModelName = Str::pluralStudly($this->modelName);
+      $pluralModelNameCamel = Str::camel($PluralModelName);
       $stub = $this->getEditBladeStub();
-      $stub = str_replace('{{ModelName}}', $this->modelName, $stub);
-      $stub = str_replace('{{PluralModelName}}', Str::pluralStudly($this->modelName), $stub);
+      $stub = str_replace('{{modelName}}', $modelName, $stub);
+      $stub = str_replace('{{ModelName}}', $ModelName, $stub);
+      $stub = str_replace('{{PluralModelName}}', $PluralModelName, $stub);
+      $stub = str_replace('{{pluralModelNameCamel}}', $pluralModelNameCamel, $stub);
+      if (!is_dir(dirname($editBladePath))) {
+        mkdir(dirname($editBladePath), 0755, true);
+      }
+      $this->files->put($editBladePath, $stub);
     }
-    if (!is_dir(dirname($editBladePath))) {
-      mkdir(dirname($editBladePath), 0755, true);
-    }
-    $this->files->put($editBladePath, $stub);
   }
 }
