@@ -2136,16 +2136,16 @@
         },
         {
             "name": "livewire/flux",
-            "version": "v2.0.6",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/livewire/flux.git",
-                "reference": "afd046a72c7a10e6ff56f3e9c16eb390c3db0cc5"
+                "reference": "7d236c6caa6a8fa8604caa08abf2ae630be12c24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/flux/zipball/afd046a72c7a10e6ff56f3e9c16eb390c3db0cc5",
-                "reference": "afd046a72c7a10e6ff56f3e9c16eb390c3db0cc5",
+                "url": "https://api.github.com/repos/livewire/flux/zipball/7d236c6caa6a8fa8604caa08abf2ae630be12c24",
+                "reference": "7d236c6caa6a8fa8604caa08abf2ae630be12c24",
                 "shasum": ""
             },
             "require": {
@@ -2156,6 +2156,9 @@
                 "livewire/livewire": "^3.5.19",
                 "php": "^8.1",
                 "symfony/console": "^6.0|^7.0"
+            },
+            "conflict": {
+                "livewire/blaze": "<0.1.0"
             },
             "type": "library",
             "extra": {
@@ -2193,9 +2196,9 @@
             ],
             "support": {
                 "issues": "https://github.com/livewire/flux/issues",
-                "source": "https://github.com/livewire/flux/tree/v2.0.6"
+                "source": "https://github.com/livewire/flux/tree/v2.5.0"
             },
-            "time": "2025-03-12T20:53:07+00:00"
+            "time": "2025-09-29T21:36:00+00:00"
         },
         {
             "name": "livewire/livewire",
@@ -10319,12 +10322,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2|^8.3"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }

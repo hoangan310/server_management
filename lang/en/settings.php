@@ -23,4 +23,5 @@ return [
     'your_email_is_unverified' => 'Your email is unverified.',
     'click_here_to_request_verify' => 'Click here to request a new verification email',
     'verification_link_sent' => 'A new verification email has been sent',
+    'locale' => 'Language',
 ];

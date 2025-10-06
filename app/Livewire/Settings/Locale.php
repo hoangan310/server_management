@@ -18,7 +18,7 @@ class Locale extends Component
     public function updateLocale(): void
     {
         $this->validate([
-            'locale' => 'required|string|in:en,da',
+            'locale' => 'required|string|in:en,vi',
         ]);
 
         auth()->user()->update([
@@ -34,7 +34,7 @@ class Locale extends Component
         return view('livewire.settings.locale', [
             'locales' => [
                 'en' => 'English',
-                'da' => 'Danish',
+                'vi' => 'Vietnamese',
             ],
         ]);
     }

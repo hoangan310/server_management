@@ -28,6 +28,12 @@ class EditUser extends Component
     #[Validate('required|string|max:2')]
     public string $locale = 'en';
 
+    #[Validate('nullable|date|date_format:Y-m-d')]
+    public string $birthday = '';
+
+    #[Validate('nullable|string|max:10|regex:/^[0-9]+$/')]
+    public string $phone = '';
+
     /** @var array <int,string> */
     public array $userRoles = [];
 
@@ -38,6 +44,8 @@ class EditUser extends Component
         $this->user = $user;
         $this->name = $this->user->name;
         $this->email = $this->user->email;
+        $this->birthday = $this->user->birthday;
+        $this->phone = $this->user->phone;
         $this->locale = $this->user->locale ?? 'en';
 
         // get user roles
@@ -53,10 +61,12 @@ class EditUser extends Component
         $this->user->update([
             'name' => $this->name,
             'email' => $this->email,
+            'birthday' => $this->birthday,
+            'phone' => $this->phone,
         ]);
 
         // Convert the userRoles to integers
-        $userRoles = Arr::map($this->userRoles, fn ($role): int => (int) $role);
+        $userRoles = Arr::map($this->userRoles, fn($role): int => (int) $role);
 
         // Sync the user roles
         $this->user->syncRoles($userRoles);
@@ -64,7 +74,6 @@ class EditUser extends Component
         $this->flash('success', __('users.user_updated'));
 
         $this->redirect(route('admin.users.index'), true);
-
     }
 
     #[Layout('components.layouts.admin')]

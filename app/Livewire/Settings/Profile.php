@@ -16,6 +16,11 @@ class Profile extends Component
 
     public string $email = '';
 
+    public string $birthday = '';
+
+    public string $phone = '';
+
+
     /**
      * Mount the component.
      */
@@ -23,6 +28,8 @@ class Profile extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->birthday = Auth::user()->birthday ?: '';
+        $this->phone = Auth::user()->phone ?: '';
     }
 
     /**
@@ -43,6 +50,9 @@ class Profile extends Component
                 'max:255',
                 Rule::unique(User::class)->ignore($user->id),
             ],
+
+            'birthday' => ['nullable', 'date', 'date_format:Y-m-d'],
+            'phone' => ['nullable', 'string', 'max:10', 'regex:/^[0-9]+$/'],
         ]);
 
         $user->fill($validated);

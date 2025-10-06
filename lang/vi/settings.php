@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'title' => 'Cài đặt',
+    'subtitle' => 'Tại đây bạn có thể thay đổi cài đặt cho tài khoản của mình.',
+    'appearance' => 'Giao diện',
+    'update_your_settings_appearance' => 'Cập nhật cài đặt giao diện của bạn',
+    'light' => 'Sáng',
+    'dark' => 'Tối',
+    'system' => 'Hệ thống',
+    'delete_account_title' => 'Xóa tài khoản',
+    'delete_account_subtitle' => 'Tại đây bạn có thể xóa vĩnh viễn tài khoản của mình. Hành động này là vĩnh viễn và không thể hoàn tác.',
+    'delete_are_you_sure' => 'Bạn có chắc chắn muốn xóa tài khoản của mình không?',
+    'delete_are_you_sure_text' => 'Khi tài khoản của bạn bị xóa, tất cả tài nguyên và dữ liệu của nó sẽ bị xóa vĩnh viễn. Vui lòng nhập mật khẩu của bạn để xác nhận rằng bạn muốn xóa vĩnh viễn tài khoản của mình.',
+    'password' => 'Mật khẩu',
+    'update_password' => 'Cập nhật mật khẩu',
+    'update_password_description' => 'Đảm bảo tài khoản của bạn sử dụng mật khẩu dài, ngẫu nhiên để giữ an toàn.',
+    'current_password' => 'Mật khẩu hiện tại',
+    'new_password' => 'Mật khẩu mới',
+    'confirm_new_password' => 'Xác nhận mật khẩu mới',
+    'profile' => 'Tài khoản',
+    'profile_description' => 'Cập nhật thông tin tài khoản và địa chỉ email của bạn.',
+    'your_email_is_unverified' => 'Email của bạn chưa được xác minh.',
+    'click_here_to_request_verify' => 'Nhấp vào đây để yêu cầu email xác minh mới',
+    'verification_link_sent' => 'Một email xác minh mới đã được gửi',
+    'locale' => 'Ngôn ngữ',
+];

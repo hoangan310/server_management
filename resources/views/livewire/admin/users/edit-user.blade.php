@@ -7,6 +7,8 @@
     <x-form wire:submit="updateUser" class="space-y-6">
         <flux:input wire:model.live="name" label="{{ __('users.name') }}" />
         <flux:input wire:model.live="email" label="{{ __('users.email') }}" />
+        <flux:input wire:model.live="birthday" type="date" label="{{ __('users.birthday') }}" />
+        <flux:input wire:model.live="phone" type="text" label="{{ __('users.phone') }}" />
 
         <flux:select wire:model="locale" label="{{ __('users.select_locale') }}" placeholder="{{ __('users.select_locale') }}" name="locale">
             @foreach($locales as $key => $locale)

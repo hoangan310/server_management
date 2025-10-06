@@ -32,12 +32,6 @@ Route::middleware(['auth'])->group(function (): void {
         Route::get('/permissions', \App\Livewire\Admin\Permissions::class)->name('permissions.index')->middleware('can:view permissions');
         Route::get('/permissions/create', \App\Livewire\Admin\Permissions\CreatePermission::class)->name('permissions.create')->middleware('can:create permissions');
         Route::get('/permissions/{permission}/edit', \App\Livewire\Admin\Permissions\EditPermission::class)->name('permissions.edit')->middleware('can:update permissions');
-
-        // Servers
-        Route::get('/servers', \App\Livewire\Admin\Servers::class)->name('servers.index')->middleware('can:view servers');
-        Route::get('/servers/create', \App\Livewire\Admin\Servers\CreateServer::class)->name('servers.create')->middleware('can:create servers');
-        Route::get('/servers/{server}/edit', \App\Livewire\Admin\Servers\EditServer::class)->name('servers.edit')->middleware('can:update servers');
-        Route::get('/servers/{server}', \App\Livewire\Admin\Servers\ViewServer::class)->name('servers.view')->middleware('can:view servers');
     });
 });
 
