@@ -23,4 +23,10 @@ enum AdminPermissionsEnum: string
     case CREATE_PERMISSIONS = 'create permissions';
     case UPDATE_PERMISSIONS = 'update permissions';
     case DELETE_PERMISSIONS = 'delete permissions';
+
+        // Categories
+    case VIEW_CATEGORIES = 'view categories';
+    case CREATE_CATEGORIES = 'create categories';
+    case UPDATE_CATEGORIES = 'update categories';
+    case DELETE_CATEGORIES = 'delete categories';
 }

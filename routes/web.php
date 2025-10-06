@@ -33,6 +33,14 @@ Route::middleware(['auth'])->group(function (): void {
         Route::get('/permissions/create', \App\Livewire\Admin\Permissions\CreatePermission::class)->name('permissions.create')->middleware('can:create permissions');
         Route::get('/permissions/{permission}/edit', \App\Livewire\Admin\Permissions\EditPermission::class)->name('permissions.edit')->middleware('can:update permissions');
     });
+
+    // Categories
+    Route::prefix('admin')->as('admin.')->group(function (): void {
+        Route::get('/categories', \App\Livewire\Admin\Categories::class)->name('categories.index')->middleware('can:view categories');
+        Route::get('/categories/create', \App\Livewire\Admin\Categories\CreateCategory::class)->name('categories.create')->middleware('can:create categories');
+        Route::get('/categories/{category}/edit', \App\Livewire\Admin\Categories\EditCategory::class)->name('categories.edit')->middleware('can:update categories');
+        Route::get('/categories/{category}', \App\Livewire\Admin\Categories\ViewCategory::class)->name('categories.show')->middleware('can:view categories');
+    });
 });
 
 require __DIR__ . '/auth.php';

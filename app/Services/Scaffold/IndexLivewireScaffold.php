@@ -195,18 +195,26 @@ STUB;
             <x-table.row wire:key="{{modelName}}-{{ \${{modelName}}->id }}">
                 <x-table.cell>{{ \${{modelName}}->id }}</x-table.cell>
                 <x-table.cell>{{ \${{modelName}}->name }}</x-table.cell>
-                <x-table.cell class="text-right">
-                    <div class="flex items-center justify-end gap-2">
-                        @can('view {{pluralModelNameCamel}}')
-                        <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.show', \${{modelName}}) }}" icon="eye" variant="ghost" size="sm" />
-                        @endcan
-                        @can('update {{pluralModelNameCamel}}')
-                        <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.edit', \${{modelName}}) }}" icon="edit" variant="ghost" size="sm" />
-                        @endcan
-                        @can('delete {{pluralModelNameCamel}}')
-                        <flux:button wire:click="confirmDelete({{ \${{modelName}}->id }})" icon="trash" variant="ghost" size="sm" />
-                        @endcan
-                    </div>
+                <x-table.cell class="gap-2 flex justify-end">
+                    @can('view {{pluralModelNameCamel}}')
+                    <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.show', \${{modelName}}) }}" size="sm" variant="ghost">
+                        {{ __('global.view') }}
+                    </flux:button>
+                    @endcan
+
+                    @can('update {{pluralModelNameCamel}}')
+                    <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.edit', \${{modelName}}) }}" size="sm">
+                        {{ __('global.edit') }}
+                    </flux:button>
+                    @endcan
+
+                    @can('delete {{pluralModelNameCamel}}')
+                    <flux:modal.trigger name="delete-category-modal">
+                        <flux:button size="sm" variant="danger" wire:click="confirmDelete({{ \${{modelName}}->id }})">
+                            {{ __('global.delete') }}
+                        </flux:button>
+                    </flux:modal.trigger>
+                    @endcan
                 </x-table.cell>
             </x-table.row>
             @endforeach

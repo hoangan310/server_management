@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\AdminCategoriesEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'slug' => $this->faker->slug(),
+            'description' => $this->faker->sentence(),
+            'status' => AdminCategoriesEnum::ACTIVE->value,
         ];
     }
 }

@@ -14,6 +14,7 @@ class RoleAndPermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        // Delete existing permissions and recreate them
         Permission::query()->delete();
         $permissions = AdminPermissionsEnum::cases();
 
@@ -23,9 +24,20 @@ class RoleAndPermissionSeeder extends Seeder
             ]);
         }
 
+        // Delete existing roles and recreate Super Admin
         Role::query()->delete();
         $role = Role::query()->updateOrCreate(['name' => 'Super Admin']);
+
+        // Get all permissions including any newly added ones
+        $allPermissions = Permission::all();
+
+        // Map each permission to the Super Admin role
+        foreach ($allPermissions as $permission) {
+            $role->givePermissionTo($permission);
+        }
+
+        // Sync permissions to ensure any removed permissions are handled
         $permissions = Permission::all()->pluck('name')->toArray();
-        $role->givePermissionTo($permissions);
+        $role->syncPermissions($permissions);
     }
 }
