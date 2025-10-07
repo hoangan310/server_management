@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin;
 
 use App\Models\User;
-use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -79,8 +78,6 @@ class Users extends Component
         $user->delete();
 
         $this->alert('success', __('users.user_deleted'));
-        Flux::modal('delete-user-modal')->close();
-
         $this->dispatch('userDeleted');
 
         $this->resetPage();

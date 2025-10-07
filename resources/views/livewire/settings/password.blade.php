@@ -6,7 +6,7 @@
 
     <x-settings.layout :heading="__('settings.update_password')" :subheading="__('settings.update_password_description')">
         <form wire:submit="updatePassword" class="mt-6 space-y-6">
-            <flux:input
+            <x-input
                 wire:model="current_password"
                 id="update_password_current_passwordpassword"
                 :label="__('settings.current_password')"
@@ -15,7 +15,7 @@
                 required
                 autocomplete="current-password"
             />
-            <flux:input
+            <x-input
                 wire:model="password"
                 id="update_password_password"
                 :label="__('settings.new_password')"
@@ -24,7 +24,7 @@
                 required
                 autocomplete="new-password"
             />
-            <flux:input
+            <x-input
                 wire:model="password_confirmation"
                 id="update_password_password_confirmation"
                 :label="__('settings.confirm_new_password')"
@@ -36,7 +36,7 @@
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
-                    <flux:button variant="primary" type="submit" class="w-full">{{ __('global.save') }}</flux:button>
+                    <x-button class="btn-primary" type="submit" class="w-full">{{ __('global.save') }}</x-button>
                 </div>
 
                 <x-action-message class="me-3" on="password-updated">

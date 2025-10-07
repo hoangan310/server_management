@@ -5,11 +5,11 @@
     </x-page-heading>
 
     <x-form wire:submit="createCompany" class="space-y-6">
-        <flux:input wire:model.live="name" label="{{ __('companies.company_name') }}" />
+        <x-input wire:model.live="name" label="{{ __('companies.company_name') }}" />
 
-        <flux:button type="submit" icon="save" variant="primary">
+        <x-button type="submit" icon="save" class="btn-primary">
             {{ __('companies.create_company') }}
-        </flux:button>
+        </x-button>
     </x-form>
 
 </section>

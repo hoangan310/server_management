@@ -6,57 +6,63 @@
 
     <x-form wire:submit="updateSubmission" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <flux:input wire:model.live="name" label="{{ __('submissions.submission_name') }}" />
-            <flux:input wire:model.live="email" type="email" label="{{ __('submissions.email') }}" />
+            <x-input wire:model.live="name" label="{{ __('submissions.submission_name') }}" />
+            <x-input wire:model.live="email" type="email" label="{{ __('submissions.email') }}" />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <flux:select wire:model.live="company_id" label="{{ __('submissions.company') }}" placeholder="{{ __('submissions.select_company') }}">
+            <x-select wire:model.live="company_id" label="{{ __('submissions.company') }}" placeholder="{{ __('submissions.select_company') }}">
                 @foreach($companies as $company)
-                <flux:select.option value="{{ $company->id }}">{{ $company->name }}</flux:option>
+                <option value="{{ $company->id }}">{{ $company->name }}</option>
                     @endforeach
-            </flux:select>
+            </x-select>
 
-            <flux:select wire:model.live="category_id" label="{{ __('submissions.category') }}" placeholder="{{ __('submissions.select_category') }}">
+            <x-select wire:model.live="category_id" label="{{ __('submissions.category') }}" placeholder="{{ __('submissions.select_category') }}">
                 @foreach($categories as $category)
-                <flux:select.option value="{{ $category->id }}">{{ $category->name }}</flux:option>
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
-            </flux:select>
+            </x-select>
         </div>
 
         <div class="space-y-4">
-            <flux:field label="{{ __('submissions.logo') }}">
-                <flux:file-upload wire:model="logo" accept="image/*" />
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">{{ __('submissions.logo') }}</span>
+                </label>
+                <input type="file" wire:model="logo" accept="image/*" class="file-input file-input-bordered w-full" />
 
                 @if($logo)
                 <div class="mt-2 flex items-center space-x-2">
                     <img src="{{ $logo->temporaryUrl() }}" alt="Preview" class="h-20 w-20 object-cover rounded">
-                    <flux:button type="button" wire:click="removeLogo" variant="danger" size="sm">
+                    <x-button type="button" wire:click="removeLogo" class="btn-error" class="btn-sm">
                         {{ __('submissions.remove_logo') }}
-                    </flux:button>
+                    </x-button>
                 </div>
                 @elseif($currentLogo && !$shouldRemoveLogo)
                 <div class="mt-2 flex items-center space-x-2">
                     <img src="{{ $submission->logo_url }}" alt="Current logo" class="h-20 w-20 object-cover rounded">
-                    <flux:button type="button" wire:click="removeLogo" variant="danger" size="sm">
+                    <x-button type="button" wire:click="removeLogo" class="btn-error" class="btn-sm">
                         {{ __('submissions.remove_logo') }}
-                    </flux:button>
+                    </x-button>
                 </div>
                 @endif
-            </flux:field>
+            </div>
         </div>
 
-        <flux:field label="{{ __('submissions.message') }}">
-            <flux:textarea wire:model.live="message" rows="4" placeholder="{{ __('submissions.message_placeholder') }}" />
-        </flux:field>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">{{ __('submissions.message') }}</span>
+            </label>
+            <textarea wire:model.live="message" rows="4" placeholder="{{ __('submissions.message_placeholder') }}" class="textarea textarea-bordered w-full"></textarea>
+        </div>
 
         <div class="flex justify-end space-x-3">
-            <flux:button type="button" wire:click="$dispatch('cancel')" variant="ghost">
+            <x-button type="button" wire:click="$dispatch('cancel')" class="btn-ghost">
                 {{ __('global.cancel') }}
-            </flux:button>
-            <flux:button type="submit" icon="save" variant="primary">
+            </x-button>
+            <x-button type="submit" icon="save" class="btn-primary">
                 {{ __('submissions.update_submission') }}
-            </flux:button>
+            </x-button>
         </div>
     </x-form>
 </section>

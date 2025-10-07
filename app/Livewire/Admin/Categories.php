@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Category;
-use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -65,7 +64,6 @@ class Categories extends Component
         $category->delete();
 
         $this->alert('success', __('categories.category_deleted'));
-        Flux::modal('delete-category-modal')->close();
 
         $this->dispatch('categoryDeleted');
 

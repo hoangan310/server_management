@@ -4,9 +4,9 @@
         <x-slot:subtitle>Viewing {{ $company->name }}</x-slot:subtitle>
         <x-slot:buttons>
             @can('update companies')
-              <flux:button icon="edit" variant="primary" href="{{ route('admin.companies.edit', $company) }}">
+              <x-button icon="edit" class="btn-primary" href="{{ route('admin.companies.edit', $company) }}">
                 {{ __('companies.edit_company') }}
-              </flux:button>
+              </x-button>
             @endcan
         </x-slot:buttons>
     </x-page-heading>

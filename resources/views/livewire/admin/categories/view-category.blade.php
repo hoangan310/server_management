@@ -4,9 +4,9 @@
         <x-slot:subtitle>Viewing {{ $category->name }}</x-slot:subtitle>
         <x-slot:buttons>
             @can('update categories')
-              <flux:button icon="edit" variant="primary" href="{{ route('admin.categories.edit', $category) }}">
+              <x-button icon="edit" class="btn-primary" href="{{ route('admin.categories.edit', $category) }}">
                 {{ __('categories.edit_category') }}
-              </flux:button>
+              </x-button>
             @endcan
         </x-slot:buttons>
     </x-page-heading>

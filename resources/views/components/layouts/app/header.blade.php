@@ -4,54 +4,54 @@
         @include('partials.head')
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+        <div class="navbar bg-base-100" container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+            <div class="drawer-side".toggle class="lg:hidden" icon="o-bars-2" inset="left" />
 
             <a href="{{ route('home') }}" class="ml-2 mr-5 flex items-center space-x-2 lg:ml-0">
                 <x-app-logo class="size-8" href="#"></x-app-logo>
             </a>
 
-            <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="layout-grid" href="{{ route('dashboard') }}" :current="request()->routeIs('dashboard')">
+            <ul class="menu menu-horizontal" class="-mb-px max-lg:hidden">
+                <ul class="menu menu-horizontal".item icon="o-layout-grid" href="{{ route('dashboard') }}" :current="request()->routeIs('dashboard')">
                     Dashboard
-                </flux:navbar.item>
-            </flux:navbar>
+                </ul class="menu menu-horizontal".item>
+            </ul class="menu menu-horizontal">
 
-            <flux:spacer />
+            <div class="flex-1" />
 
-            <flux:navbar class="mr-1.5 space-x-0.5 py-0!">
-                <flux:tooltip content="Search" position="bottom">
-                    <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" label="Search" />
-                </flux:tooltip>
-                <flux:tooltip content="Repository" position="bottom">
-                    <flux:navbar.item
+            <ul class="menu menu-horizontal" class="mr-1.5 space-x-0.5 py-0!">
+                <div class="tooltip" content="Search" position="bottom">
+                    <ul class="menu menu-horizontal".item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" label="Search" />
+                </div class="tooltip">
+                <div class="tooltip" content="Repository" position="bottom">
+                    <ul class="menu menu-horizontal".item
                         class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                        icon="folder-git-2"
+                        icon="o-folder-git-2"
                         href="https://github.com/laravel/livewire-starter-kit"
                         target="_blank"
                         label="Repository"
                     />
-                </flux:tooltip>
-                <flux:tooltip content="Documentation" position="bottom">
-                    <flux:navbar.item
+                </div class="tooltip">
+                <div class="tooltip" content="Documentation" position="bottom">
+                    <ul class="menu menu-horizontal".item
                         class="h-10 max-lg:hidden [&>div>svg]:size-5"
                         icon="book-open-text"
                         href="https://laravel.com/docs/starter-kits"
                         target="_blank"
                         label="Documentation"
                     />
-                </flux:tooltip>
-            </flux:navbar>
+                </div class="tooltip">
+            </ul class="menu menu-horizontal">
 
             <!-- Desktop User Menu -->
-            <flux:dropdown position="top" align="end">
-                <flux:profile
+            <div class="dropdown" position="top" align="end">
+                <div class="avatar"
                     class="cursor-pointer"
                     :initials="auth()->user()->initials()"
                 />
 
-                <flux:menu>
-                    <flux:menu.radio.group>
+                <ul class="menu">
+                    <ul class="menu".radio.group>
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
@@ -68,54 +68,54 @@
                                 </div>
                             </div>
                         </div>
-                    </flux:menu.radio.group>
+                    </ul class="menu".radio.group>
 
-                    <flux:menu.separator />
+                    <ul class="menu".separator />
 
-                    <flux:menu.radio.group>
-                        <flux:menu.item href="/settings/profile" icon="cog">Settings</flux:menu.item>
-                    </flux:menu.radio.group>
+                    <ul class="menu".radio.group>
+                        <ul class="menu".item href="/settings/profile" icon="o-cog">Settings</ul class="menu".item>
+                    </ul class="menu".radio.group>
 
-                    <flux:menu.separator />
+                    <ul class="menu".separator />
 
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
-                        <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
+                        <ul class="menu".item as="button" type="submit" icon="o-arrow-right-start-on-rectangle" class="w-full">
                             {{ __('Log Out') }}
-                        </flux:menu.item>
+                        </ul class="menu".item>
                     </form>
-                </flux:menu>
-            </flux:dropdown>
-        </flux:header>
+                </ul class="menu">
+            </div class="dropdown">
+        </div class="navbar bg-base-100">
 
         <!-- Mobile Menu -->
-        <flux:sidebar stashable sticky class="lg:hidden border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
+        <div class="drawer-side" stashable sticky class="lg:hidden border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+            <div class="drawer-side".toggle class="lg:hidden" icon="o-x-mark" />
 
             <a href="{{ route('dashboard') }}" class="ml-1 flex items-center space-x-2">
                 <x-app-logo class="size-8" href="#"></x-app-logo>
             </a>
 
-            <flux:navlist variant="outline">
-                <flux:navlist.group heading="Platform">
-                    <flux:navlist.item icon="layout-grid" href="{{ route('dashboard') }}" :current="request()->routeIs('dashboard')">
+            <ul class="menu" variant="outline">
+                <ul class="menu".group heading="Platform">
+                    <ul class="menu".item icon="o-layout-grid" href="{{ route('dashboard') }}" :current="request()->routeIs('dashboard')">
                         Dashboard
-                    </flux:navlist.item>
-                </flux:navlist.group>
-            </flux:navlist>
+                    </ul class="menu".item>
+                </ul class="menu".group>
+            </ul class="menu">
 
-            <flux:spacer />
+            <div class="flex-1" />
 
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
+            <ul class="menu" variant="outline">
+                <ul class="menu".item icon="o-folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                     Repository
-                </flux:navlist.item>
+                </ul class="menu".item>
 
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
+                <ul class="menu".item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
                     Documentation
-                </flux:navlist.item>
-            </flux:navlist>
-        </flux:sidebar>
+                </ul class="menu".item>
+            </ul class="menu">
+        </div class="drawer-side">
 
         {{ $slot }}
 

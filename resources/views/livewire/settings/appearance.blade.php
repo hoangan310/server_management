@@ -5,10 +5,15 @@
     </x-page-heading>
 
     <x-settings.layout :heading="__('settings.appearance')" :subheading=" __('settings.update_your_settings_appearance')">
-        <flux:radio.group x-data variant="segmented" x-model="$flux.appearance">
-            <flux:radio value="light" icon="sun">{{ __('settings.light') }}</flux:radio>
-            <flux:radio value="dark" icon="moon">{{ __('settings.dark') }}</flux:radio>
-            <flux:radio value="system" icon="computer-desktop">{{ __('settings.system') }}</flux:radio>
-        </flux:radio.group>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">{{ __('settings.choose_theme') }}</span>
+            </label>
+            <div class="join w-full">
+                <input class="join-item btn" type="radio" name="theme" value="light" aria-label="{{ __('settings.light') }}" />
+                <input class="join-item btn" type="radio" name="theme" value="dark" aria-label="{{ __('settings.dark') }}" />
+                <input class="join-item btn" type="radio" name="theme" value="system" aria-label="{{ __('settings.system') }}" />
+            </div>
+        </div>
     </x-settings.layout>
 </div>

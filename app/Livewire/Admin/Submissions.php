@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Submission;
-use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -65,12 +64,11 @@ class Submissions extends Component
         $submission->delete();
 
         $this->alert('success', __('submissions.submission_deleted'));
-        Flux::modal('delete-submission-modal')->close();
 
         $this->dispatch('submissionDeleted');
 
         $this->resetPage();
-        $this->afterDeleteSubmission();
+        // $this->afterDeleteSubmission();
     }
 
     #[Layout('components.layouts.admin')]

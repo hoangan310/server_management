@@ -9,10 +9,10 @@
     </x-page-heading>
 
     <x-form wire:submit="savePermission" class="space-y-6">
-        <flux:input wire:model.live="name" label="{{ __('permissions.name') }}" />
-        <flux:button type="submit" icon="save" variant="primary">
+        <x-input wire:model.live="name" label="{{ __('permissions.name') }}" />
+        <x-button type="submit" icon="save" class="btn-primary">
             {{ __('permissions.update_permission') }}
-        </flux:button>
+        </x-button>
     </x-form>
 
 </section>

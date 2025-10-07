@@ -5,197 +5,203 @@
     @include('partials.head')
 </head>
 
-<body class="min-h-screen bg-white dark:bg-zinc-800">
-    <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 lg:dark:bg-zinc-900/50">
-        <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
+<body class="min-h-screen bg-base-100">
+    <div class="drawer lg:drawer-open">
+        <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
 
-        <a href="{{ route('home') }}" class="mr-5 flex items-center space-x-2">
-            <x-app-logo class="size-8"></x-app-logo>
-        </a>
-
-        <div>
-            <flux:button href="{{ route('home') }}" icon="arrow-left" size="sm">
-                {{ __('global.go_to_frontend') }}
-            </flux:button>
-        </div>
-
-        <flux:navlist variant="outline">
-            <flux:navlist.group heading="Platform" class="grid">
-                <flux:navlist.item icon="home" :href="route('admin.index')" :current="request()->routeIs('admin.index')">Dashboard</flux:navlist.item>
-            </flux:navlist.group>
-            {{-- <flux:navlist.group heading="Monetization" class="grid">--}}
-            {{-- <flux:navlist.item icon="arrow-right" :href="route('dashboard')" :current="request()->routeIs('dashboard')">Overview</flux:navlist.item>--}}
-            {{-- <flux:navlist.item icon="arrow-right" :href="route('dashboard')" :current="request()->routeIs('dashboard')">Subscriptions</flux:navlist.item>--}}
-            {{-- <flux:navlist.item icon="arrow-right" :href="route('dashboard')" :current="request()->routeIs('dashboard')">Invoices</flux:navlist.item>--}}
-            {{-- </flux:navlist.group>--}}
-            @canany(['view users', 'view roles', 'view permissions', 'view categories', 'view companies', 'view submissions'])
-            <flux:navlist.group heading="Users" class="grid">
-                @can('view users')
-                <flux:navlist.item icon="user" :href="route('admin.users.index')" :current="request()->routeIs('admin.users.*')">
-                    {{ __('users.title') }}
-                </flux:navlist.item>
-                @endcan
-                @can('view roles')
-                <flux:navlist.item icon="shield-user" :href="route('admin.roles.index')" :current="request()->routeIs('admin.roles.*')">
-                    {{ __('roles.title') }}
-                </flux:navlist.item>
-                @endcan
-                @can('view permissions')
-                <flux:navlist.item icon="shield-check" :href="route('admin.permissions.index')" :current="request()->routeIs('admin.permissions.*')">
-                    {{ __('permissions.title') }}
-                </flux:navlist.item>
-                @endcan
-                @can('view categories')
-                <flux:navlist.item icon="folder-git-2" :href="route('admin.categories.index')" :current="request()->routeIs('admin.categories.*')">
-                    {{ __('categories.title') }}
-                </flux:navlist.item>
-                @endcan
-                @can('view companies')
-                <flux:navlist.item icon="building-office" :href="route('admin.companies.index')" :current="request()->routeIs('admin.companies.*')">
-                    {{ __('companies.title') }}
-                </flux:navlist.item>
-                @endcan
-                @can('view submissions')
-                <flux:navlist.item icon="document-text" :href="route('admin.submissions.index')" :current="request()->routeIs('admin.submissions.*')">
-                    {{ __('submissions.title') }}
-                </flux:navlist.item>
-                @endcan
-            </flux:navlist.group>
-            @endcanany
-        </flux:navlist>
-
-        <flux:spacer />
-
-        @if (Session::has('admin_user_id'))
-        <div class="py-2 flex items-center justify-center bg-zinc-100 dark:bg-zinc-600 dark:text-white mb-6 rounded">
-            <form id="stop-impersonating" class="flex flex-col items-center gap-3" action="{{ route('impersonate.destroy') }}"
-                method="POST">
-                @csrf
-                @method('DELETE')
-                <p class="text-xs">
-                    {{ __('users.you_are_impersonating') }}:
-                    <strong>{{ auth()->user()->name }}</strong>
-                </p>
-                <flux:button type="submit" size="sm" variant="danger" form="stop-impersonating" class="!w-full !flex !flex-row">
-                    <div>
-                        {{ __('users.stop_impersonating') }}
-                    </div>
-                </flux:button>
-            </form>
-        </div>
-        @endif
-
-        <flux:navlist variant="outline">
-            {{-- <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">--}}
-            {{-- Repository--}}
-            {{-- </flux:navlist.item>--}}
-
-            {{-- <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">--}}
-            {{-- Documentation--}}
-            {{-- </flux:navlist.item>--}}
-        </flux:navlist>
-
-        @auth
-        <!-- Desktop User Menu -->
-        <flux:dropdown position="bottom" align="start">
-            <flux:profile
-                :name="auth()->user()->name"
-                :initials="auth()->user()->initials()"
-                icon-trailing="chevrons-up-down" />
-
-            <flux:menu class="w-[220px]">
-                <flux:menu.radio.group>
-                    <div class="p-0 text-sm font-normal">
-                        <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                            <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                <span
-                                    class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                    {{ auth()->user()->initials() }}
-                                </span>
-                            </span>
-
-                            <div class="grid flex-1 text-left text-sm leading-tight">
-                                <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
-                                <span class="truncate text-xs">{{ auth()->user()->email }}</span>
+        <!-- Page content -->
+        <div class="drawer-content flex flex-col">
+            <!-- Navbar -->
+            <div class="navbar bg-base-100 lg:hidden">
+                <div class="flex-none">
+                    <label for="drawer-toggle" class="btn btn-square btn-ghost">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </label>
+                </div>
+                <div class="flex-1">
+                    <a href="{{ route('home') }}" class="btn btn-ghost text-xl">
+                        <x-app-logo class="size-8"></x-app-logo>
+                    </a>
+                </div>
+                <div class="flex-none">
+                    @auth
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                            <div class="w-10 rounded-full bg-primary text-primary-content flex items-center justify-center">
+                                {{ auth()->user()->initials() }}
                             </div>
                         </div>
+                        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                            <li>
+                                <div class="flex items-center gap-2 px-1 py-1.5">
+                                    <div class="w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center">
+                                        {{ auth()->user()->initials() }}
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">{{ auth()->user()->name }}</div>
+                                        <div class="text-xs">{{ auth()->user()->email }}</div>
+                                    </div>
+                                </div>
+                            </li>
+                            <div class="divider my-1"></div>
+                            <li><a href="/settings/profile">{{ __('global.settings') }}</a></li>
+                            <div class="divider my-1"></div>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left">{{ __('global.log_out') }}</button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
-                </flux:menu.radio.group>
+                    @endauth
+                </div>
+            </div>
 
-                <flux:menu.separator />
+            <!-- Main content -->
+            <main class="flex-1">
+                {{ $slot }}
+            </main>
+        </div>
 
-                <flux:menu.radio.group>
-                    <flux:menu.item href="/settings/profile" icon="cog">{{ __('global.settings') }}</flux:menu.item>
-                </flux:menu.radio.group>
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="drawer-toggle" aria-label="close sidebar" class="drawer-overlay"></label>
+            <aside class="min-h-full w-80 bg-base-200">
+                <div class="p-4">
+                    <a href="{{ route('home') }}" class="flex items-center space-x-2 mb-6">
+                        <x-app-logo class="size-8"></x-app-logo>
+                        <span class="font-bold text-lg">Admin Panel</span>
+                    </a>
 
-                <flux:menu.separator />
+                    <div class="mb-6">
+                        <x-button label="{{ __('global.go_to_frontend') }}"
+                            icon="o-arrow-left"
+                            href="{{ route('home') }}"
+                            class="btn-sm" />
+                    </div>
 
-                <form method="POST" action="{{ route('logout') }}" class="w-full">
-                    @csrf
-                    <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                        {{ __('global.log_out') }}
-                    </flux:menu.item>
-                </form>
-            </flux:menu>
-        </flux:dropdown>
-        @endauth
-    </flux:sidebar>
+                    <ul class="menu p-0 w-full">
+                        <li class="menu-title">
+                            <span>Platform</span>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.index') }}"
+                                class="{{ request()->routeIs('admin.index') ? 'active' : '' }}">
+                                <x-icon name="o-home" class="w-4 h-4" />
+                                Dashboard
+                            </a>
+                        </li>
 
-    <!-- Mobile User Menu -->
-    <flux:header class="lg:hidden">
-        <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+                        @canany(['view users', 'view roles', 'view permissions', 'view categories', 'view companies', 'view submissions'])
+                        <li class="menu-title">
+                            <span>Users</span>
+                        </li>
+                        @can('view users')
+                        <li>
+                            <a href="{{ route('admin.users.index') }}"
+                                class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                                <x-icon name="o-user" class="w-4 h-4" />
+                                {{ __('users.title') }}
+                            </a>
+                        </li>
+                        @endcan
+                        @can('view roles')
+                        <li>
+                            <a href="{{ route('admin.roles.index') }}"
+                                class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                                <x-icon name="o-user-group" class="w-4 h-4" />
+                                {{ __('roles.title') }}
+                            </a>
+                        </li>
+                        @endcan
+                        @can('view permissions')
+                        <li>
+                            <a href="{{ route('admin.permissions.index') }}"
+                                class="{{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
+                                <x-icon name="o-shield-check" class="w-4 h-4" />
+                                {{ __('permissions.title') }}
+                            </a>
+                        </li>
+                        @endcan
+                        @can('view categories')
+                        <li>
+                            <a href="{{ route('admin.categories.index') }}"
+                                class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                                <x-icon name="o-folder-git-2" class="w-4 h-4" />
+                                {{ __('categories.title') }}
+                            </a>
+                        </li>
+                        @endcan
+                        @can('view companies')
+                        <li>
+                            <a href="{{ route('admin.companies.index') }}"
+                                class="{{ request()->routeIs('admin.companies.*') ? 'active' : '' }}">
+                                <x-icon name="o-building-office" class="w-4 h-4" />
+                                {{ __('companies.title') }}
+                            </a>
+                        </li>
+                        @endcan
+                        @can('view submissions')
+                        <li>
+                            <a href="{{ route('admin.submissions.index') }}"
+                                class="{{ request()->routeIs('admin.submissions.*') ? 'active' : '' }}">
+                                <x-icon name="o-document-text" class="w-4 h-4" />
+                                {{ __('submissions.title') }}
+                            </a>
+                        </li>
+                        @endcan
+                        @endcanany
+                    </ul>
 
-        <flux:spacer />
+                    @if (Session::has('admin_user_id'))
+                    <div class="mt-auto p-4 bg-warning/20 rounded-lg">
+                        <form action="{{ route('impersonate.destroy') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <p class="text-sm mb-2">
+                                {{ __('users.you_are_impersonating') }}:
+                                <strong>{{ auth()->user()->name }}</strong>
+                            </p>
+                            <x-button type="submit"
+                                label="{{ __('users.stop_impersonating') }}"
+                                class="btn-error btn-sm w-full" />
+                        </form>
+                    </div>
+                    @endif
 
-        @auth
-        <flux:dropdown position="top" align="end">
-            <flux:profile
-                :initials="auth()->user()->initials()"
-                icon-trailing="chevron-down" />
-
-            <flux:menu>
-                <flux:menu.radio.group>
-                    <div class="p-0 text-sm font-normal">
-                        <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                            <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                <span
-                                    class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                    @auth
+                    <div class="mt-auto">
+                        <div class="dropdown dropdown-top w-full">
+                            <div tabindex="0" role="button" class="btn btn-ghost w-full justify-start">
+                                <div class="w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center">
                                     {{ auth()->user()->initials() }}
-                                </span>
-                            </span>
-
-                            <div class="grid flex-1 text-left text-sm leading-tight">
-                                <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
-                                <span class="truncate text-xs">{{ auth()->user()->email }}</span>
+                                </div>
+                                <div class="text-left">
+                                    <div class="font-semibold">{{ auth()->user()->name }}</div>
+                                    <div class="text-xs">{{ auth()->user()->email }}</div>
+                                </div>
                             </div>
+                            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full mb-2">
+                                <li><a href="/settings/profile">{{ __('global.settings') }}</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="w-full text-left">{{ __('global.log_out') }}</button>
+                                    </form>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                </flux:menu.radio.group>
+                    @endauth
+                </div>
+            </aside>
+        </div>
+    </div>
 
-                <flux:menu.separator />
-
-                <flux:menu.radio.group>
-                    <flux:menu.item href="/settings/profile" icon="cog">
-                        {{ __('global.settings') }}
-                    </flux:menu.item>
-                </flux:menu.radio.group>
-
-                <flux:menu.separator />
-
-                <form method="POST" action="{{ route('logout') }}" class="w-full">
-                    @csrf
-                    <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                        {{ __('global.log_out') }}
-                    </flux:menu.item>
-                </form>
-            </flux:menu>
-        </flux:dropdown>
-        @endauth
-    </flux:header>
-
-    {{ $slot }}
-
-    @fluxScripts
+    @livewireScripts
     <x-livewire-alert::scripts />
     <x-livewire-alert::flash />
 

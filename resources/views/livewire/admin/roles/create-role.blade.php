@@ -10,7 +10,7 @@
     </x-page-heading>
 
     <x-form wire:submit="createRole" class="space-y-6">
-        <flux:input wire:model.live="name" label="{{ __('roles.name') }}" />
+        <x-input wire:model.live="name" label="{{ __('roles.name') }}" />
 
         @php
         $permissionGroups = $permissions->groupBy(function($permission) {
@@ -23,7 +23,7 @@
             <h3 class="font-semibold mb-2">{{ Str::ucfirst($groupName) }}</h3>
             <div class="flex flex-wrap gap-4">
                 @foreach($permissions as $permission)
-                <flux:checkbox
+                <x-checkbox
                     wire:model="selectedPermissions"
                     label="{{ $permission->name }}"
                     value="{{ $permission->id }}" />
@@ -32,8 +32,8 @@
         </div>
         @endforeach
 
-        <flux:button type="submit" icon="save" variant="primary">
+        <x-button type="submit" icon="save" class="btn-primary">
             {{ __('roles.create_role') }}
-        </flux:button>
+        </x-button>
     </x-form>
 </section>

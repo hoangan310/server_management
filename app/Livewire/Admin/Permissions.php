@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin;
 
-use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -31,6 +30,8 @@ class Permissions extends Component
     #[Url]
     public string $search = '';
 
+    public ?int $confirmingPermissionId = null;
+
     public function mount(): void
     {
         $this->authorize('view permissions');
@@ -41,7 +42,33 @@ class Permissions extends Component
         $this->resetPage();
     }
 
-    public function deletePermission(string $permissionId): void
+    public function confirmDelete(int $permissionId): void
+    {
+        $this->confirmingPermissionId = $permissionId;
+    }
+
+    public function afterDeletePermission(): void
+    {
+        $this->confirmingPermissionId = null;
+    }
+
+    public function deletePermission(): void
+    {
+        if (!$this->confirmingPermissionId) {
+            return;
+        }
+
+        $this->authorize('delete permissions');
+
+        $permission = Permission::query()->where('id', $this->confirmingPermissionId)->firstOrFail();
+        $permission->delete();
+
+        $this->alert('success', __('permissions.permission_deleted'));
+        $this->afterDeletePermission();
+        $this->dispatch('permissionDeleted');
+    }
+
+    public function deletePermissionOld(string $permissionId): void
     {
 
         $this->authorize('delete permissions');
@@ -51,7 +78,6 @@ class Permissions extends Component
         $permission->delete();
 
         $this->alert('success', __('permissions.permission_deleted'));
-        Flux::modal('delete-profile-' . $permissionId)->close();
 
         $this->dispatch('permissionDeleted');
     }

@@ -24,7 +24,7 @@ class IndexLivewireScaffold
 namespace App\Livewire\Admin;
 
 use App\Models\{{ModelName}};
-use Flux\Flux;
+use Mary\Traits\Toast;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -36,6 +36,7 @@ use Livewire\WithPagination;
 class {{PluralModelName}} extends Component
 {
     use LivewireAlert;
+    use Toast;
     use WithPagination;
 
     #[Session]
@@ -86,7 +87,7 @@ class {{PluralModelName}} extends Component
         \${{modelName}}->delete();
 
         \$this->alert('success', __('{{pluralModelNameCamel}}.{{modelName}}_deleted'));
-        Flux::modal('delete-{{modelName}}-modal')->close();
+        \$this->success('{{ModelName}} deleted successfully');
 
         \$this->dispatch('{{modelName}}Deleted');
 
@@ -157,95 +158,80 @@ STUB;
     protected function getIndexBladeStub(): string
     {
         return <<<STUB
-<section class="w-full">
-    <x-page-heading>
-        <x-slot:title>{{ __('{{pluralModelNameCamel}}.title') }}</x-slot:title>
-        <x-slot:subtitle>{{ __('{{pluralModelNameCamel}}.title_description') }}</x-slot:subtitle>
-        <x-slot:buttons>
-            @can('create {{pluralModelNameCamel}}')
-            <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.create') }}" variant="primary" icon="plus">
-                {{ __('{{pluralModelNameCamel}}.create_{{modelName}}') }}
-            </flux:button>
-            @endcan
-        </x-slot:buttons>
-    </x-page-heading>
+<div class="p-6">
+    <x-header title="{{ __('{{pluralModelNameCamel}}.title') }}" subtitle="{{ __('{{pluralModelNameCamel}}.title_description') }}">
+        @can('create {{pluralModelNameCamel}}')
+        <x-slot:actions>
+            <x-button label="{{ __('{{pluralModelNameCamel}}.create_{{modelName}}') }}" 
+                      icon="o-plus" 
+                      class="btn-primary" 
+                      href="{{ route('admin.{{pluralModelNameCamel}}.create') }}" />
+        </x-slot:actions>
+        @endcan
+    </x-header>
 
     <div class="flex items-center justify-between w-full mb-6 gap-2">
-        <flux:input wire:model.live="search" placeholder="{{ __('global.search_here') }}" class="!w-auto" />
-        <flux:spacer />
+        <x-input wire:model.live="search" 
+                 placeholder="{{ __('global.search_here') }}" 
+                 class="!w-auto" />
         
-        <flux:select wire:model.live="perPage" class="!w-auto">
-            <flux:select.option value="10">{{ __('global.10_per_page') }}</flux:select.option>
-            <flux:select.option value="25">{{ __('global.25_per_page') }}</flux:select.option>
-            <flux:select.option value="50">{{ __('global.50_per_page') }}</flux:select.option>
-            <flux:select.option value="100">{{ __('global.100_per_page') }}</flux:select.option>
-        </flux:select>
+        <x-select wire:model.live="perPage" 
+                  class="!w-auto"
+                  :options="[
+                      ['id' => '10', 'name' => '{{ __('global.10_per_page') }}'],
+                      ['id' => '25', 'name' => '{{ __('global.25_per_page') }}'],
+                      ['id' => '50', 'name' => '{{ __('global.50_per_page') }}'],
+                      ['id' => '100', 'name' => '{{ __('global.100_per_page') }}']
+                  ]" />
     </div>
 
-    <x-table>
-        <x-slot:head>
-            <x-table.row>
-                <x-table.heading>{{ __('global.id') }}</x-table.heading>
-                <x-table.heading>{{ __('{{pluralModelNameCamel}}.{{modelName}}_name') }}</x-table.heading>
-                <x-table.heading class="text-right">{{ __('global.actions') }}</x-table.heading>
-            </x-table.row>
-        </x-slot:head>
-        <x-slot:body>
-            @foreach(\${{pluralModelNameCamel}} as \${{modelName}})
-            <x-table.row wire:key="{{modelName}}-{{ \${{modelName}}->id }}">
-                <x-table.cell>{{ \${{modelName}}->id }}</x-table.cell>
-                <x-table.cell>{{ \${{modelName}}->name }}</x-table.cell>
-                <x-table.cell class="gap-2 flex justify-end">
-                    @can('view {{pluralModelNameCamel}}')
-                    <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.show', \${{modelName}}) }}" size="sm" variant="ghost">
-                        {{ __('global.view') }}
-                    </flux:button>
-                    @endcan
+    <x-table :headers="[
+        ['key' => 'id', 'label' => '{{ __('global.id') }}'],
+        ['key' => 'name', 'label' => '{{ __('{{pluralModelNameCamel}}.{{modelName}}_name') }}'],
+        ['key' => 'actions', 'label' => '{{ __('global.actions') }}', 'class' => 'text-right']
+    ]" :rows="\${{pluralModelNameCamel}}">
+        @scope('cell_actions', \${{modelName}})
+            <div class="flex gap-2 justify-end">
+                @can('view {{pluralModelNameCamel}}')
+                <x-button icon="o-eye" 
+                          href="{{ route('admin.{{pluralModelNameCamel}}.show', \${{modelName}}) }}" 
+                          class="btn-ghost btn-sm" />
+                @endcan
 
-                    @can('update {{pluralModelNameCamel}}')
-                    <flux:button href="{{ route('admin.{{pluralModelNameCamel}}.edit', \${{modelName}}) }}" size="sm">
-                        {{ __('global.edit') }}
-                    </flux:button>
-                    @endcan
+                @can('update {{pluralModelNameCamel}}')
+                <x-button icon="o-pencil" 
+                          href="{{ route('admin.{{pluralModelNameCamel}}.edit', \${{modelName}}) }}" 
+                          class="btn-ghost btn-sm" />
+                @endcan
 
-                    @can('delete {{pluralModelNameCamel}}')
-                    <flux:modal.trigger name="delete-{{modelName}}-modal">
-                        <flux:button size="sm" variant="danger" wire:click="confirmDelete({{ \${{modelName}}->id }})">
-                            {{ __('global.delete') }}
-                        </flux:button>
-                    </flux:modal.trigger>
-                    @endcan
-                </x-table.cell>
-            </x-table.row>
-            @endforeach
-        </x-slot:body>
+                @can('delete {{pluralModelNameCamel}}')
+                <x-button icon="o-trash" 
+                          wire:click="confirmDelete({{ \${{modelName}}->id }})" 
+                          class="btn-ghost btn-sm text-error" />
+                @endcan
+            </div>
+        @endscope
     </x-table>
 
     <div class="mt-4">
         {{ \${{pluralModelNameCamel}}->links() }}
     </div>
 
-    <!-- Modal chung cho tất cả {{pluralModelNameCamel}} -->
-    <flux:modal name="delete-{{modelName}}-modal"
-        class="min-w-[22rem] space-y-6 flex flex-col justify-between">
-        <div>
-            <flux:heading size="lg">{{ __('{{pluralModelNameCamel}}.delete_{{modelName}}') }}?</flux:heading>
-            <flux:subheading>
-                <p>{{ __('{{pluralModelNameCamel}}.you_are_about_to_delete') }}</p>
-                <p>{{ __('global.this_action_is_irreversible') }}</p>
-            </flux:subheading>
-        </div>
-        <div class="flex gap-2 !mt-auto mb-0">
-            <flux:modal.close>
-                <flux:button variant="ghost" wire:click="afterDelete{{ModelName}}">{{ __('global.cancel') }}</flux:button>
-            </flux:modal.close>
-            <flux:spacer />
-            <flux:button type="button" variant="danger" wire:click="delete{{ModelName}}">
-                {{ __('{{pluralModelNameCamel}}.delete_{{modelName}}') }}
-            </flux:button>
-        </div>
-    </flux:modal>
-</section>
+    <!-- Delete Confirmation Modal -->
+    <x-modal wire:model="confirming{{ModelName}}Id" title="{{ __('{{pluralModelNameCamel}}.delete_{{modelName}}') }}?">
+        <p>{{ __('{{pluralModelNameCamel}}.you_are_about_to_delete') }}</p>
+        <p>{{ __('global.this_action_is_irreversible') }}</p>
+        
+        <x-slot:actions>
+            <x-button label="{{ __('global.cancel') }}" 
+                      wire:click="afterDelete{{ModelName}}" 
+                      class="btn-ghost" />
+            <x-button label="{{ __('{{pluralModelNameCamel}}.delete_{{modelName}}') }}" 
+                      wire:click="delete{{ModelName}}" 
+                      class="btn-error" />
+        </x-slot:actions>
+    </x-modal>
+</div>
 STUB;
     }
 }

@@ -6,10 +6,10 @@
     <div class="flex justify-between items-center @if(empty($subtitle)) mb-4 @endif">
         <div>
             @if(!empty($title))
-                <flux:heading size="xl" level="1">{{ $title }}</flux:heading>
+                <h1 class="text-3xl font-bold">{{ $title }}</h1>
             @endif
             @if(!empty($subtitle))
-                <flux:subheading size="lg" class="mb-6">{{ $subtitle }}</flux:subheading>
+                <p class="text-lg text-base-content/70 mb-6">{{ $subtitle }}</p>
             @endif
         </div>
         <div>
@@ -20,5 +20,5 @@
             @endif
         </div>
     </div>
-    <flux:separator variant="subtle" />
+    <div class="divider"></div>
 </div>

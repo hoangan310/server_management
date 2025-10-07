@@ -1,18 +1,18 @@
 <div class="flex items-start max-md:flex-col">
     <div class="mr-10 w-full pb-4 md:w-[220px]">
-        <flux:navlist>
-            <flux:navlist.item href="{{ route('settings.profile') }}" wire:navigate>{{ __('settings.profile') }}</flux:navlist.item>
-            <flux:navlist.item href="{{ route('settings.password') }}" wire:navigate>{{ __('settings.password') }}</flux:navlist.item>
-            <flux:navlist.item href="{{ route('settings.appearance') }}" wire:navigate>{{ __('settings.appearance') }}</flux:navlist.item>
-            <flux:navlist.item href="{{ route('settings.locale') }}" wire:navigate>{{ __('settings.locale') }}</flux:navlist.item>
-        </flux:navlist>
+        <ul class="menu">
+            <ul class="menu".item href="{{ route('settings.profile') }}" wire:navigate>{{ __('settings.profile') }}</ul class="menu".item>
+            <ul class="menu".item href="{{ route('settings.password') }}" wire:navigate>{{ __('settings.password') }}</ul class="menu".item>
+            <ul class="menu".item href="{{ route('settings.appearance') }}" wire:navigate>{{ __('settings.appearance') }}</ul class="menu".item>
+            <ul class="menu".item href="{{ route('settings.locale') }}" wire:navigate>{{ __('settings.locale') }}</ul class="menu".item>
+        </ul class="menu">
     </div>
 
-    <flux:separator class="md:hidden" />
+    <div class="divider" class="md:hidden" />
 
     <div class="flex-1 self-stretch max-md:pt-6">
-        <flux:heading>{{ $heading ?? '' }}</flux:heading>
-        <flux:subheading>{{ $subheading ?? '' }}</flux:subheading>
+        <h1>{{ $heading ?? '' }}</h1>
+        <p>{{ $subheading ?? '' }}</p>
 
         <div class="mt-5 w-full max-w-lg">
             {{ $slot }}

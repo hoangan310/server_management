@@ -5,26 +5,32 @@
     </x-page-heading>
 
     <x-form wire:submit="updateUser" class="space-y-6">
-        <flux:input wire:model.live="name" label="{{ __('users.name') }}" />
-        <flux:input wire:model.live="email" label="{{ __('users.email') }}" />
-        <flux:input wire:model.live="birthday" type="date" label="{{ __('users.birthday') }}" />
-        <flux:input wire:model.live="phone" type="text" label="{{ __('users.phone') }}" />
+        <x-input wire:model.live="name" label="{{ __('users.name') }}" />
+        <x-input wire:model.live="email" label="{{ __('users.email') }}" />
+        <x-input wire:model.live="birthday" type="date" label="{{ __('users.birthday') }}" />
+        <x-input wire:model.live="phone" type="text" label="{{ __('users.phone') }}" />
 
-        <flux:select wire:model="locale" label="{{ __('users.select_locale') }}" placeholder="{{ __('users.select_locale') }}" name="locale">
-            @foreach($locales as $key => $locale)
-            <flux:select.option value="{{ $key }}">{{ $locale }}</flux:select.option>
-            @endforeach
-        </flux:select>
+        <x-select wire:model="locale"
+            label="{{ __('users.select_locale') }}"
+            placeholder="{{ __('users.select_locale') }}"
+            name="locale"
+            :options="collect($locales)->map(fn($locale, $key) => ['id' => $key, 'name' => $locale])->values()->toArray()" />
 
-        <flux:checkbox.group wire:model.live="userRoles" label="{{ __('users.roles') }}" description="{{ __('users.roles_description') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            @foreach($roles as $role)
-            <flux:checkbox label="{{$role->name}}" value="{{$role->id}}" />
-            @endforeach
-        </flux:checkbox.group>
+        <div class="space-y-3">
+            <label class="text-sm font-medium text-gray-700">{{ __('users.roles') }}</label>
+            <p class="text-sm text-gray-500">{{ __('users.roles_description') }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                @foreach($roles as $role)
+                <x-checkbox wire:model.live="userRoles"
+                    label="{{$role->name}}"
+                    value="{{$role->id}}" />
+                @endforeach
+            </div>
+        </div>
 
-        <flux:button type="submit" icon="save" variant="primary">
+        <x-button type="submit" icon="save" class="btn-primary">
             {{ __('users.update_user') }}
-        </flux:button>
+        </x-button>
     </x-form>
 
 </section>

@@ -11,23 +11,23 @@
                     {{ $submission->name }}
                 </h3>
                 <div class="flex space-x-2">
-                    <flux:button 
+                    <x-button 
                         wire:click="$dispatch('edit-submission', { id: {{ $submission->id }} })" 
-                        icon="pencil" 
+                        icon="o-pencil" 
                         variant="secondary" 
-                        size="sm"
+                        class="btn-sm"
                     >
                         {{ __('submissions.edit_submission') }}
-                    </flux:button>
-                    <flux:button 
+                    </x-button>
+                    <x-button 
                         wire:click="deleteSubmission" 
-                        icon="trash" 
-                        variant="danger" 
-                        size="sm"
+                        icon="o-trash" 
+                        class="btn-error" 
+                        class="btn-sm"
                         wire:confirm="{{ __('submissions.you_are_about_to_delete') }}"
                     >
                         {{ __('submissions.delete_submission') }}
-                    </flux:button>
+                    </x-button>
                 </div>
             </div>
         </div>

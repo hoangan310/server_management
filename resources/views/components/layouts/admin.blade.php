@@ -1,5 +1,5 @@
 <x-layouts.app.sidebar>
-    <flux:main>
+    <div class="min-h-screen bg-base-100">
         {{ $slot }}
-    </flux:main>
+    </div>
 </x-layouts.app.sidebar>

@@ -10,12 +10,12 @@
     </x-page-heading>
 
     <x-form wire:submit="editRole" class="space-y-6">
-        <flux:input wire:model.live="name" label="{{ __('roles.name') }}" />
+        <x-input wire:model.live="name" label="{{ __('roles.name') }}" />
 
         <div class="space-y-6">
-            <flux:button type="button" wire:click="selectAllPermissions" variant="ghost" size="sm">
+            <x-button type="button" wire:click="selectAllPermissions" class="btn-ghost" class="btn-sm">
                 {{ __('roles.select_all_permissions') }}
-            </flux:button>
+            </x-button>
 
             @php
             $permissionGroups = $permissions->groupBy(function($permission) {
@@ -29,17 +29,19 @@
                     <h3 class="text-lg font-medium capitalize">{{ Str::ucfirst($group) }}</h3>
                 </div>
 
-                <flux:checkbox.group wire:model.live="selectedPermissions" class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1">
+                <div class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
                     @foreach($groupPermissions as $permission)
-                    <flux:checkbox label="{{$permission->name}}" value="{{$permission->id}}" />
+                    <x-checkbox wire:model.live="selectedPermissions"
+                        label="{{$permission->name}}"
+                        value="{{$permission->id}}" />
                     @endforeach
-                </flux:checkbox.group>
+                </div>
             </div>
             @endforeach
         </div>
 
-        <flux:button type="submit" icon="save" variant="primary">
+        <x-button type="submit" icon="save" class="btn-primary">
             {{ __('roles.update_role') }}
-        </flux:button>
+        </x-button>
     </x-form>
 </section>

@@ -6,7 +6,7 @@
 
     <form wire:submit="resetPassword" class="flex flex-col gap-6">
         <!-- Email Address -->
-        <flux:input
+        <x-input
             wire:model="email"
             id="email"
             :label="__('global.email_address')"
@@ -17,7 +17,7 @@
         />
 
         <!-- Password -->
-        <flux:input
+        <x-input
             wire:model="password"
             id="password"
             :label="__('global.password')"
@@ -29,7 +29,7 @@
         />
 
         <!-- Confirm Password -->
-        <flux:input
+        <x-input
             wire:model="password_confirmation"
             id="password_confirmation"
             :label="__('global.confirm_password')"
@@ -41,9 +41,9 @@
         />
 
         <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
+            <x-button type="submit" class="btn-primary" class="w-full">
                 {{ __('global.reset_password') }}
-            </flux:button>
+            </x-button>
         </div>
     </form>
 </div>

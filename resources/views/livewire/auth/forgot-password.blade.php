@@ -6,7 +6,7 @@
 
     <form wire:submit="sendPasswordResetLink" class="flex flex-col gap-6">
         <!-- Email Address -->
-        <flux:input
+        <x-input
             wire:model="email"
             :label="__('global.email_address')"
             type="email"
@@ -16,13 +16,13 @@
             placeholder="email@example.com"
         />
 
-        <flux:button variant="primary" type="submit" class="w-full">{{ __('global.send_password_reset_link') }}</flux:button>
+        <x-button class="btn-primary" type="submit" class="w-full">{{ __('global.send_password_reset_link') }}</x-button>
     </form>
 
     <div class="space-x-1 text-center text-sm text-zinc-400">
         <span>{{ __('global.or_return_to') }}</span>
-        <flux:link :href="route('login')" wire:navigate>
+        <x-text-link href="{{ route('login') }}" wire:navigate>
             {{ __('global.login') }}
-        </flux:link>
+        </x-text-link>
     </div>
 </div>

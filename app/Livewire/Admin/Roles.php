@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin;
 
-use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -31,6 +30,8 @@ class Roles extends Component
     #[Url]
     public string $search = '';
 
+    public ?int $confirmingRoleId = null;
+
     public function mount(): void
     {
         $this->authorize('view roles');
@@ -41,7 +42,33 @@ class Roles extends Component
         $this->resetPage();
     }
 
-    public function deleteRole(string $roleId): void
+    public function confirmDelete(int $roleId): void
+    {
+        $this->confirmingRoleId = $roleId;
+    }
+
+    public function afterDeleteRole(): void
+    {
+        $this->confirmingRoleId = null;
+    }
+
+    public function deleteRole(): void
+    {
+        if (!$this->confirmingRoleId) {
+            return;
+        }
+
+        $this->authorize('delete roles');
+
+        $role = Role::query()->where('id', $this->confirmingRoleId)->firstOrFail();
+        $role->delete();
+
+        $this->alert('success', __('roles.role_deleted'));
+        $this->afterDeleteRole();
+        $this->dispatch('roleDeleted');
+    }
+
+    public function deleteRoleOld(string $roleId): void
     {
         $this->authorize('delete roles');
 
@@ -50,7 +77,6 @@ class Roles extends Component
         $role->delete();
 
         $this->alert('success', __('roles.role_deleted'));
-        Flux::modal('delete-role-modal-' . $roleId)->close();
 
         $this->dispatch('roleDeleted');
     }
