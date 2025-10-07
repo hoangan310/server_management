@@ -46,4 +46,8 @@ return [
     'verification_link_sent' => 'A new verification link has been sent to the email address you provided during registration.',
     'resend_verification_email' => 'Resend verification email',
     'back' => 'Back',
+    'click_to_upload' => 'Click to upload',
+    'or_drag_and_drop' => 'or drag and drop',
+    'accepted_formats' => 'Accepted formats: :formats',
+    'max_size' => 'Max size: :size',
 ];

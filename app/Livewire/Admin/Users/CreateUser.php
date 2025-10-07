@@ -31,7 +31,7 @@ class CreateUser extends Component
     public array $selectedRoles = [];
 
     #[Validate('nullable|date|date_format:Y-m-d')]
-    public string $birthday = '';
+    public ?string $birthday = null;
 
     #[Validate('nullable|string|max:10|regex:/^[0-9]+$/')]
     public string $phone = '';

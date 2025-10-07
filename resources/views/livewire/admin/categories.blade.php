@@ -72,7 +72,6 @@
 
     <!-- Modal chung cho tất cả categories -->
     <flux:modal name="delete-category-modal"
-        x-show="$wire.isShowModal"
         class="min-w-[22rem] space-y-6 flex flex-col justify-between">
         <div>
             <flux:heading size="lg">{{ __('categories.delete_category') }}?</flux:heading>
@@ -83,7 +82,7 @@
         </div>
         <div class="flex gap-2 !mt-auto mb-0">
             <flux:modal.close>
-                <flux:button variant="ghost">{{ __('global.cancel') }}</flux:button>
+                <flux:button variant="ghost" wire:click="afterDeleteCategory">{{ __('global.cancel') }}</flux:button>
             </flux:modal.close>
             <flux:spacer />
             <flux:button type="button" variant="danger" wire:click="deleteCategory">

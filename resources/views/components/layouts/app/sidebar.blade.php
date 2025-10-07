@@ -28,7 +28,7 @@
             {{-- <flux:navlist.item icon="arrow-right" :href="route('dashboard')" :current="request()->routeIs('dashboard')">Subscriptions</flux:navlist.item>--}}
             {{-- <flux:navlist.item icon="arrow-right" :href="route('dashboard')" :current="request()->routeIs('dashboard')">Invoices</flux:navlist.item>--}}
             {{-- </flux:navlist.group>--}}
-            @canany(['view users', 'view roles', 'view permissions', 'view categories', 'view companies'])
+            @canany(['view users', 'view roles', 'view permissions', 'view categories', 'view companies', 'view submissions'])
             <flux:navlist.group heading="Users" class="grid">
                 @can('view users')
                 <flux:navlist.item icon="user" :href="route('admin.users.index')" :current="request()->routeIs('admin.users.*')">
@@ -53,6 +53,11 @@
                 @can('view companies')
                 <flux:navlist.item icon="building-office" :href="route('admin.companies.index')" :current="request()->routeIs('admin.companies.*')">
                     {{ __('companies.title') }}
+                </flux:navlist.item>
+                @endcan
+                @can('view submissions')
+                <flux:navlist.item icon="document-text" :href="route('admin.submissions.index')" :current="request()->routeIs('admin.submissions.*')">
+                    {{ __('submissions.title') }}
                 </flux:navlist.item>
                 @endcan
             </flux:navlist.group>

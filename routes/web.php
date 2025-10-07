@@ -49,6 +49,14 @@ Route::middleware(['auth'])->group(function (): void {
         Route::get('/companies/{company}/edit', \App\Livewire\Admin\Companies\EditCompany::class)->name('companies.edit')->middleware('can:update companies');
         Route::get('/companies/{company}', \App\Livewire\Admin\Companies\ViewCompany::class)->name('companies.show')->middleware('can:view companies');
     });
+
+    // Submissions
+    Route::prefix('admin')->as('admin.')->group(function (): void {
+        Route::get('/submissions', \App\Livewire\Admin\Submissions::class)->name('submissions.index')->middleware('can:view submissions');
+        Route::get('/submissions/create', \App\Livewire\Admin\Submissions\CreateSubmission::class)->name('submissions.create')->middleware('can:create submissions');
+        Route::get('/submissions/{submission}/edit', \App\Livewire\Admin\Submissions\EditSubmission::class)->name('submissions.edit')->middleware('can:update submissions');
+        Route::get('/submissions/{submission}', \App\Livewire\Admin\Submissions\ViewSubmission::class)->name('submissions.show')->middleware('can:view submissions');
+    });
 });
 
 require __DIR__ . '/auth.php';

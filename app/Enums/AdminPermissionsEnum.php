@@ -35,4 +35,10 @@ enum AdminPermissionsEnum: string
     case CREATE_COMPANIES = 'create companies';
     case UPDATE_COMPANIES = 'update companies';
     case DELETE_COMPANIES = 'delete companies';
+
+        // Submissions
+    case VIEW_SUBMISSIONS = 'view submissions';
+    case CREATE_SUBMISSIONS = 'create submissions';
+    case UPDATE_SUBMISSIONS = 'update submissions';
+    case DELETE_SUBMISSIONS = 'delete submissions';
 }

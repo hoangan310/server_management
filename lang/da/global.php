@@ -45,4 +45,8 @@ return [
     'please_verify_your_email_address' => 'Bekræft venligst din e-mail-adresse ved at klikke på linket, vi lige har sendt til dig.',
     'verification_link_sent' => 'Et nyt bekræftelseslink er blevet sendt til den e-mail-adresse, du angav under registrering.',
     'resend_verification_email' => 'Send bekræftelses-e-mail igen',
+    'click_to_upload' => 'Klik for at uploade',
+    'or_drag_and_drop' => 'eller træk og slip',
+    'accepted_formats' => 'Accepterede formater: :formats',
+    'max_size' => 'Maksimal størrelse: :size',
 ];

@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\User;
+use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -26,7 +27,6 @@ class Users extends Component
 
     public ?string $role = null;
 
-    public bool $isShowModal = false;
     public ?int $confirmingUserId = null; // id user đang chờ confirm xóa
 
     /** @var array<int,string> */
@@ -50,13 +50,11 @@ class Users extends Component
     // Khi nhấn delete → lưu user id và mở modal
     public function confirmDelete(int $userId): void
     {
-        $this->isShowModal = true;
         $this->confirmingUserId = $userId;
     }
 
     public function afterDeleteUser(): void
     {
-        $this->isShowModal = false;
         $this->confirmingUserId = null;
     }
 
@@ -81,11 +79,11 @@ class Users extends Component
         $user->delete();
 
         $this->alert('success', __('users.user_deleted'));
+        Flux::modal('delete-user-modal')->close();
 
-        $this->confirmingUserId = null;
+        $this->dispatch('userDeleted');
+
         $this->resetPage();
-
-        // **Đóng modal**
         $this->afterDeleteUser();
     }
 

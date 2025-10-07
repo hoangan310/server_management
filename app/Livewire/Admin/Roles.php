@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -49,6 +50,7 @@ class Roles extends Component
         $role->delete();
 
         $this->alert('success', __('roles.role_deleted'));
+        Flux::modal('delete-role-modal-' . $roleId)->close();
 
         $this->dispatch('roleDeleted');
     }

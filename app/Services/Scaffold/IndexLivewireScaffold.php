@@ -24,6 +24,7 @@ class IndexLivewireScaffold
 namespace App\Livewire\Admin;
 
 use App\Models\{{ModelName}};
+use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -43,7 +44,6 @@ class {{PluralModelName}} extends Component
     #[Url]
     public string \$search = '';
 
-    public bool \$isShowModal = false;
     public ?int \$confirming{{ModelName}}Id = null;
 
     /** @var array<int,string> */
@@ -66,13 +66,11 @@ class {{PluralModelName}} extends Component
 
     public function confirmDelete(int \${{modelName}}Id): void
     {
-        \$this->isShowModal = true;
         \$this->confirming{{ModelName}}Id = \${{modelName}}Id;
     }
 
     public function afterDelete{{ModelName}}(): void
     {
-        \$this->isShowModal = false;
         \$this->confirming{{ModelName}}Id = null;
     }
 
@@ -88,8 +86,10 @@ class {{PluralModelName}} extends Component
         \${{modelName}}->delete();
 
         \$this->alert('success', __('{{pluralModelNameCamel}}.{{modelName}}_deleted'));
+        Flux::modal('delete-{{modelName}}-modal')->close();
 
-        \$this->confirming{{ModelName}}Id = null;
+        \$this->dispatch('{{modelName}}Deleted');
+
         \$this->resetPage();
         \$this->afterDelete{{ModelName}}();
     }
@@ -209,7 +209,7 @@ STUB;
                     @endcan
 
                     @can('delete {{pluralModelNameCamel}}')
-                    <flux:modal.trigger name="delete-category-modal">
+                    <flux:modal.trigger name="delete-{{modelName}}-modal">
                         <flux:button size="sm" variant="danger" wire:click="confirmDelete({{ \${{modelName}}->id }})">
                             {{ __('global.delete') }}
                         </flux:button>
@@ -227,7 +227,6 @@ STUB;
 
     <!-- Modal chung cho tất cả {{pluralModelNameCamel}} -->
     <flux:modal name="delete-{{modelName}}-modal"
-        x-show="\$wire.isShowModal" 
         class="min-w-[22rem] space-y-6 flex flex-col justify-between">
         <div>
             <flux:heading size="lg">{{ __('{{pluralModelNameCamel}}.delete_{{modelName}}') }}?</flux:heading>
@@ -238,7 +237,7 @@ STUB;
         </div>
         <div class="flex gap-2 !mt-auto mb-0">
             <flux:modal.close>
-                <flux:button variant="ghost">{{ __('global.cancel') }}</flux:button>
+                <flux:button variant="ghost" wire:click="afterDelete{{ModelName}}">{{ __('global.cancel') }}</flux:button>
             </flux:modal.close>
             <flux:spacer />
             <flux:button type="button" variant="danger" wire:click="delete{{ModelName}}">

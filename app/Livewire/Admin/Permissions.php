@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -50,6 +51,7 @@ class Permissions extends Component
         $permission->delete();
 
         $this->alert('success', __('permissions.permission_deleted'));
+        Flux::modal('delete-profile-' . $permissionId)->close();
 
         $this->dispatch('permissionDeleted');
     }

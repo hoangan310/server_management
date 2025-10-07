@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Category;
+use App\Models\Submission;
 use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -12,7 +12,7 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Categories extends Component
+class Submissions extends Component
 {
     use LivewireAlert;
     use WithPagination;
@@ -23,19 +23,19 @@ class Categories extends Component
     #[Url]
     public string $search = '';
 
-    public ?int $confirmingCategoryId = null;
+    public ?int $confirmingSubmissionId = null;
 
     /** @var array<int,string> */
     public array $searchableFields = ['name'];
 
     protected $listeners = [
-        'categoryDeleted' => '$refresh',
-        'categoryNotDeleted' => '$refresh',
+        'submissionDeleted' => '$refresh',
+        'submissionNotDeleted' => '$refresh',
     ];
 
     public function mount(): void
     {
-        $this->authorize('view categories');
+        $this->authorize('view submissions');
     }
 
     public function updatingSearch(): void
@@ -43,40 +43,41 @@ class Categories extends Component
         $this->resetPage();
     }
 
-    public function confirmDelete(int $categoryId): void
+    public function confirmDelete(int $submissionId): void
     {
-        $this->confirmingCategoryId = $categoryId;
+        $this->confirmingSubmissionId = $submissionId;
     }
 
-    public function afterDeleteCategory(): void
+    public function afterDeleteSubmission(): void
     {
-        $this->confirmingCategoryId = null;
+        $this->confirmingSubmissionId = null;
     }
 
-    public function deleteCategory(): void
+    public function deleteSubmission(): void
     {
-        if (!$this->confirmingCategoryId) {
+        if (!$this->confirmingSubmissionId) {
             return;
         }
 
-        $this->authorize('delete categories');
+        $this->authorize('delete submissions');
 
-        $category = Category::findOrFail($this->confirmingCategoryId);
-        $category->delete();
+        $submission = Submission::findOrFail($this->confirmingSubmissionId);
+        $submission->delete();
 
-        $this->alert('success', __('categories.category_deleted'));
-        Flux::modal('delete-category-modal')->close();
+        $this->alert('success', __('submissions.submission_deleted'));
+        Flux::modal('delete-submission-modal')->close();
 
-        $this->dispatch('categoryDeleted');
+        $this->dispatch('submissionDeleted');
 
         $this->resetPage();
-        $this->afterDeleteCategory();
+        $this->afterDeleteSubmission();
     }
 
     #[Layout('components.layouts.admin')]
     public function render(): View
     {
-        $categories = Category::query()
+        $submissions = Submission::query()
+            ->with(['company', 'category'])
             ->when($this->search, function ($query) {
                 foreach ($this->searchableFields as $field) {
                     $query->orWhere($field, 'LIKE', "%{$this->search}%");
@@ -84,6 +85,6 @@ class Categories extends Component
             })
             ->paginate($this->perPage);
 
-        return view('livewire.admin.categories', compact('categories'));
+        return view('livewire.admin.submissions', compact('submissions'));
     }
 }

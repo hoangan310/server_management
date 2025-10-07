@@ -14,7 +14,7 @@
     <div class="flex items-center justify-between w-full mb-6 gap-2">
         <flux:input wire:model.live="search" placeholder="{{ __('global.search_here') }}" class="!w-auto" />
         <flux:spacer />
-        
+
         <flux:select wire:model.live="perPage" class="!w-auto">
             <flux:select.option value="10">{{ __('global.10_per_page') }}</flux:select.option>
             <flux:select.option value="25">{{ __('global.25_per_page') }}</flux:select.option>
@@ -50,7 +50,7 @@
                     @endcan
 
                     @can('delete companies')
-                    <flux:modal.trigger name="delete-category-modal">
+                    <flux:modal.trigger name="delete-company-modal">
                         <flux:button size="sm" variant="danger" wire:click="confirmDelete({{ $company->id }})">
                             {{ __('global.delete') }}
                         </flux:button>
@@ -68,7 +68,6 @@
 
     <!-- Modal chung cho tất cả companies -->
     <flux:modal name="delete-company-modal"
-        x-show="$wire.isShowModal" 
         class="min-w-[22rem] space-y-6 flex flex-col justify-between">
         <div>
             <flux:heading size="lg">{{ __('companies.delete_company') }}?</flux:heading>

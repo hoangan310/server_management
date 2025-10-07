@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Company;
+use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -22,7 +23,6 @@ class Companies extends Component
     #[Url]
     public string $search = '';
 
-    public bool $isShowModal = false;
     public ?int $confirmingCompanyId = null;
 
     /** @var array<int,string> */
@@ -45,13 +45,11 @@ class Companies extends Component
 
     public function confirmDelete(int $companyId): void
     {
-        $this->isShowModal = true;
         $this->confirmingCompanyId = $companyId;
     }
 
     public function afterDeleteCompany(): void
     {
-        $this->isShowModal = false;
         $this->confirmingCompanyId = null;
     }
 
@@ -67,8 +65,10 @@ class Companies extends Component
         $company->delete();
 
         $this->alert('success', __('companies.company_deleted'));
+        Flux::modal('delete-company-modal')->close();
 
-        $this->confirmingCompanyId = null;
+        $this->dispatch('companyDeleted');
+
         $this->resetPage();
         $this->afterDeleteCompany();
     }

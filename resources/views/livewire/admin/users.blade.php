@@ -91,7 +91,6 @@
 
     <!-- Modal chung cho tất cả users -->
     <flux:modal name="delete-user-modal"
-        x-show="$wire.isShowModal"
         class="min-w-[22rem] space-y-6 flex flex-col justify-between">
         <div>
             <flux:heading size="lg">{{ __('users.delete_user') }}?</flux:heading>

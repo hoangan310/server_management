@@ -46,4 +46,8 @@ return [
     'verification_link_sent' => 'Một liên kết xác minh mới đã được gửi đến địa chỉ email bạn đã cung cấp trong quá trình đăng ký.',
     'resend_verification_email' => 'Gửi lại email xác minh',
     'back' => 'Quay lại',
+    'click_to_upload' => 'Nhấp để tải lên',
+    'or_drag_and_drop' => 'hoặc kéo và thả',
+    'accepted_formats' => 'Định dạng được chấp nhận: :formats',
+    'max_size' => 'Kích thước tối đa: :size',
 ];
