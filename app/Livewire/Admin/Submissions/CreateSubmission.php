@@ -36,6 +36,8 @@ class CreateSubmission extends Component
     #[Validate('nullable|image|max:5120')] // 5MB max
     public ?TemporaryUploadedFile $logo = null;
 
+    public array $galeries = [];
+
     #[Validate('required|string|max:1000')]
     public string $message = '';
 
@@ -48,6 +50,14 @@ class CreateSubmission extends Component
     {
         $this->validate();
 
+        // Validate galeries array
+        $this->validate([
+            'galeries' => 'nullable|array|max:10',
+            'galeries.*' => 'nullable|image|max:5120',
+        ]);
+
+        $imageService = app(ImageService::class);
+
         $data = [
             'name' => $this->name,
             'email' => $this->email,
@@ -58,9 +68,19 @@ class CreateSubmission extends Component
 
         // Handle logo upload
         if ($this->logo) {
-            $imageService = app(ImageService::class);
             $logoPath = $imageService->upload($this->logo, 'submissions', 300, 300);
             $data['logo'] = $logoPath;
+        }
+
+        // Handle galeries upload
+        if (!empty($this->galeries)) {
+            $galeryPaths = [];
+            foreach ($this->galeries as $galery) {
+                if ($galery) {
+                    $galeryPaths[] = $imageService->upload($galery, 'submissions/galeries', 800, 600);
+                }
+            }
+            $data['galeries'] = $galeryPaths;
         }
 
         Submission::create($data);
@@ -73,6 +93,12 @@ class CreateSubmission extends Component
     public function removeLogo(): void
     {
         $this->logo = null;
+    }
+
+    public function removeGalery($index): void
+    {
+        unset($this->galeries[$index]);
+        $this->galeries = array_values($this->galeries);
     }
 
     #[Layout('components.layouts.admin')]

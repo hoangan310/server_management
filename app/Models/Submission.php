@@ -18,10 +18,12 @@ class Submission extends Model
         'company_id',
         'category_id',
         'logo',
+        'galeries',
         'message',
     ];
 
     protected $casts = [
+        'galeries' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
@@ -59,5 +61,25 @@ class Submission extends Model
         }
 
         return app(\App\Services\ImageService::class)->thumbnailUrl($this->logo);
+    }
+
+    /**
+     * Get galeries URLs
+     */
+    public function getGaleriesUrlsAttribute(): array
+    {
+        if (!$this->galeries) {
+            return [];
+        }
+
+        $imageService = app(\App\Services\ImageService::class);
+
+        return collect($this->galeries)->map(function ($path) use ($imageService) {
+            return [
+                'path' => $path,
+                'url' => $imageService->url($path),
+                'thumbnail' => $imageService->thumbnailUrl($path),
+            ];
+        })->toArray();
     }
 }

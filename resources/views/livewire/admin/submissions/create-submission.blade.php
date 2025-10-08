@@ -40,6 +40,24 @@
             </flux:field>
         </div>
 
+        <div class="space-y-4">
+            <flux:field label="{{ __('submissions.galeries') }}">
+                <flux:file-upload wire:model="galeries" accept="image/*" multiple />
+                @if(!empty($galeries))
+                <div class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    @foreach($galeries as $index => $galery)
+                    <div class="relative">
+                        <img src="{{ $galery->temporaryUrl() }}" alt="Galery {{ $index + 1 }}" class="h-32 w-full object-cover rounded">
+                        <flux:button type="button" wire:click="removeGalery({{ $index }})" variant="danger" size="sm" class="mt-2 w-full">
+                            {{ __('global.remove') }}
+                        </flux:button>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+            </flux:field>
+        </div>
+
         <flux:field label="{{ __('submissions.message') }}">
             <flux:textarea wire:model.live="message" rows="4" placeholder="{{ __('submissions.message_placeholder') }}" />
         </flux:field>

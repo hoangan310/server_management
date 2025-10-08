@@ -39,11 +39,15 @@ class EditSubmission extends Component
     #[Validate('nullable|image|max:5120')] // 5MB max
     public ?TemporaryUploadedFile $logo = null;
 
+    public array $galeries = [];
+
     #[Validate('required|string|max:1000')]
     public string $message = '';
 
     public string $currentLogo = '';
     public bool $shouldRemoveLogo = false;
+    public array $currentGaleries = [];
+    public array $galeriesToRemove = [];
 
     public function mount(Submission $submission): void
     {
@@ -56,11 +60,18 @@ class EditSubmission extends Component
         $this->category_id = $submission->category_id;
         $this->message = $submission->message;
         $this->currentLogo = $submission->logo ?? '';
+        $this->currentGaleries = $submission->galeries ?? [];
     }
 
     public function updateSubmission(): void
     {
         $this->validate();
+
+        // Validate galeries array
+        $this->validate([
+            'galeries' => 'nullable|array|max:10',
+            'galeries.*' => 'nullable|image|max:5120',
+        ]);
 
         $data = [
             'name' => $this->name,
@@ -91,6 +102,28 @@ class EditSubmission extends Component
             $this->currentLogo = $logoPath;
         }
 
+        // Handle galeries removal
+        if (!empty($this->galeriesToRemove)) {
+            foreach ($this->galeriesToRemove as $galeryPath) {
+                $imageService->delete($galeryPath);
+                $this->currentGaleries = array_filter($this->currentGaleries, fn($path) => $path !== $galeryPath);
+            }
+            $this->galeriesToRemove = [];
+        }
+
+        // Handle new galeries upload
+        $newGaleryPaths = [];
+        if (!empty($this->galeries)) {
+            foreach ($this->galeries as $galery) {
+                if ($galery) {
+                    $newGaleryPaths[] = $imageService->upload($galery, 'submissions/galeries', 800, 600);
+                }
+            }
+        }
+
+        // Merge current galeries with new ones
+        $data['galeries'] = array_values(array_merge($this->currentGaleries, $newGaleryPaths));
+
         $this->submission->update($data);
 
         $this->flash('success', __('submissions.submission_updated'));
@@ -108,6 +141,19 @@ class EditSubmission extends Component
     {
         $this->logo = null;
         $this->shouldRemoveLogo = true;
+    }
+
+    public function removeGalery($index): void
+    {
+        unset($this->galeries[$index]);
+        $this->galeries = array_values($this->galeries);
+    }
+
+    public function removeCurrentGalery($path): void
+    {
+        $this->galeriesToRemove[] = $path;
+        $this->currentGaleries = array_filter($this->currentGaleries, fn($p) => $p !== $path);
+        $this->currentGaleries = array_values($this->currentGaleries);
     }
 
     #[Layout('components.layouts.admin')]

@@ -46,6 +46,46 @@
             </flux:field>
         </div>
 
+        <div class="space-y-4">
+            <flux:field label="{{ __('submissions.galeries') }}">
+                <flux:file-upload wire:model="galeries" accept="image/*" multiple />
+
+                {{-- Display current galeries --}}
+                @if(!empty($currentGaleries))
+                <div class="mt-4">
+                    <h4 class="text-sm font-medium mb-2">{{ __('submissions.current_galeries') }}</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        @foreach($currentGaleries as $galeryPath)
+                        <div class="relative">
+                            <img src="{{ app(\App\Services\ImageService::class)->url($galeryPath) }}" alt="Galery" class="h-32 w-full object-cover rounded">
+                            <flux:button type="button" wire:click="removeCurrentGalery('{{ $galeryPath }}')" variant="danger" size="sm" class="mt-2 w-full">
+                                {{ __('global.remove') }}
+                            </flux:button>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                {{-- Display new galeries --}}
+                @if(!empty($galeries))
+                <div class="mt-4">
+                    <h4 class="text-sm font-medium mb-2">{{ __('submissions.new_galeries') }}</h4>
+                    <ul class="space-y-4">
+                        @foreach($galeries as $index => $galery)
+                        <div class="relative">
+                            <img src="{{ app(\App\Services\ImageService::class)->url($galeryPath) }}" alt="Galery" class="h-32 w-full object-cover rounded">
+                            <flux:button type="button" wire:click="removeCurrentGalery('{{ $galeryPath }}')" variant="danger" size="sm" class="mt-2 w-full">
+                                {{ __('global.remove') }}
+                            </flux:button>
+                        </div>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+            </flux:field>
+        </div>
+
         <flux:field label="{{ __('submissions.message') }}">
             <flux:textarea wire:model.live="message" rows="4" placeholder="{{ __('submissions.message_placeholder') }}" />
         </flux:field>
